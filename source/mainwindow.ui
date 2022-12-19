@@ -1,0 +1,375 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1366</width>
+    <height>768</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">/* Groupbox */
+
+QGroupBox {
+    border: 1px solid #DDD;
+    border-radius: 9px;
+    margin-top: 9px;
+}
+
+QGroupBox::title {
+    subcontrol-origin: margin;
+    left: 10px;
+    padding: 0 3px 0 3px;
+}</string>
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <layout class="QHBoxLayout" name="horizontalLayout">
+    <property name="leftMargin">
+     <number>6</number>
+    </property>
+    <property name="topMargin">
+     <number>6</number>
+    </property>
+    <property name="rightMargin">
+     <number>6</number>
+    </property>
+    <property name="bottomMargin">
+     <number>6</number>
+    </property>
+    <item>
+     <widget class="QGroupBox" name="OptionsGB">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>220</width>
+        <height>0</height>
+       </size>
+      </property>
+      <property name="title">
+       <string>Options</string>
+      </property>
+      <widget class="QPushButton" name="LoadOBJ">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>30</y>
+         <width>181</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Load OBJ file</string>
+       </property>
+       <property name="checkable">
+        <bool>false</bool>
+       </property>
+      </widget>
+      <widget class="QGroupBox" name="MeshGroupBox">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>110</y>
+         <width>201</width>
+         <height>131</height>
+        </rect>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout">
+        <item>
+         <widget class="QLabel" name="subdivTitleLabel">
+          <property name="text">
+           <string>Subdivision</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="stepsLayout">
+          <item>
+           <widget class="QLabel" name="SubdivLabel">
+            <property name="text">
+             <string>Steps:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QSpinBox" name="SubdivSteps">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+            <property name="maximum">
+             <number>8</number>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="TessellationCheckBox">
+          <property name="text">
+           <string>Tessellation</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QComboBox" name="MeshPresetComboBox">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>80</y>
+         <width>181</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <item>
+        <property name="text">
+         <string>-</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Suzanne</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Spot</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>FancyCup</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>OpenCube</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>HollowTetra</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Brick</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>StackedCubesOpen</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>StackedCubesClosed</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>RockerArm</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>ItaPaperGeom</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Fertility</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Fandisk</string>
+        </property>
+       </item>
+      </widget>
+      <widget class="QGroupBox" name="tessSettingsGroupBox">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>250</y>
+         <width>201</width>
+         <height>201</height>
+        </rect>
+       </property>
+       <property name="title">
+        <string>Tessellation Settings</string>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_2">
+        <property name="leftMargin">
+         <number>6</number>
+        </property>
+        <property name="topMargin">
+         <number>6</number>
+        </property>
+        <property name="rightMargin">
+         <number>6</number>
+        </property>
+        <property name="bottomMargin">
+         <number>6</number>
+        </property>
+        <item>
+         <widget class="QCheckBox" name="HideMeshCheckBox">
+          <property name="text">
+           <string>Hide CPU Mesh</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QRadioButton" name="bilinearButton">
+          <property name="text">
+           <string>Bilinear</string>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QRadioButton" name="bicubicButton">
+          <property name="text">
+           <string>Bicubic</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="label">
+          <property name="text">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Tessellation levels:&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="OuterTessLayout">
+          <item>
+           <widget class="QLabel" name="OuterTessLabel">
+            <property name="text">
+             <string>Inner level:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QSpinBox" name="OuterTessLevel">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+            <property name="maximum">
+             <number>8</number>
+            </property>
+            <property name="value">
+             <number>1</number>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="InnerTessLayout">
+          <item>
+           <widget class="QLabel" name="InnerTessLabel">
+            <property name="text">
+             <string>Outer level:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QSpinBox" name="InnerTessLevel">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+            <property name="maximum">
+             <number>8</number>
+            </property>
+            <property name="value">
+             <number>1</number>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QGroupBox" name="MeshRenderGroupBox">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>470</y>
+         <width>201</width>
+         <height>81</height>
+        </rect>
+       </property>
+       <property name="title">
+        <string>CPU Mesh render settings</string>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_3">
+        <property name="leftMargin">
+         <number>6</number>
+        </property>
+        <property name="topMargin">
+         <number>6</number>
+        </property>
+        <property name="rightMargin">
+         <number>6</number>
+        </property>
+        <property name="bottomMargin">
+         <number>6</number>
+        </property>
+        <item>
+         <widget class="QRadioButton" name="OriginalProjectionButton">
+          <property name="text">
+           <string>Original</string>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QRadioButton" name="LimitProjectionButton">
+          <property name="text">
+           <string>Limit Projection</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+    </item>
+    <item>
+     <widget class="MainView" name="MainDisplay">
+      <property name="mouseTracking">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>MainView</class>
+   <extends>QOpenGLWidget</extends>
+   <header>mainview.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

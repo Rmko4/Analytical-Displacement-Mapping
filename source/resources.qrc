@@ -1,0 +1,30 @@
+<RCC>
+    <qresource prefix="/">
+        <file>shaders/phong.frag</file>
+        <file>shaders/phong.vert</file>
+        <file>shaders/patch.tesc</file>
+        <file>shaders/patch.tese</file>
+        <file>shaders/patch.vert</file>
+        <file>shaders/patch.frag</file>
+        <file>shaders/shading.glsl</file>
+        <file>shaders/bicubic.frag</file>
+        <file>shaders/bicubic.tesc</file>
+        <file>shaders/bicubic.tese</file>
+        <file>shaders/bicubic.vert</file>
+    </qresource>
+    <qresource prefix="/models">
+        <file alias="Suzanne.obj">models/SuzanneQuad.obj</file>
+        <file alias="Spot.obj">models/Spot.obj</file>
+        <file alias="OpenCube.obj">models/OpenCube.obj</file>
+        <file alias="HollowTetra.obj">models/HollowTetra.obj</file>
+        <file alias="StackedCubesOpen.obj">models/StackedCubesOpen.obj</file>
+        <file alias="StackedCubesClosed.obj">models/StackedCubesClosed.obj</file>
+        <file alias="RockerArm.obj">models/RockerArm.obj</file>
+        <file alias="ItaPaperGeom.obj">models/ItaPaperGeom.obj</file>
+        <file alias="Fertility.obj">models/Fertility.obj</file>
+        <file alias="Fandisk.obj">models/Fandisk.obj</file>
+        <file alias="FancyCup.obj">models/FancyCup.obj</file>
+        <file alias="Brick.obj">models/Brick.obj</file>
+        <file>models/RegularGrid.obj</file>
+    </qresource>
+</RCC>
