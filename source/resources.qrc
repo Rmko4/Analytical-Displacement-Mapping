@@ -11,6 +11,10 @@
         <file>shaders/bicubic.tesc</file>
         <file>shaders/bicubic.tese</file>
         <file>shaders/bicubic.vert</file>
+        <file>shaders/displace.frag</file>
+        <file>shaders/displace.tesc</file>
+        <file>shaders/displace.tese</file>
+        <file>shaders/displace.vert</file>
     </qresource>
     <qresource prefix="/models">
         <file alias="Suzanne.obj">models/SuzanneQuad.obj</file>

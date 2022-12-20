@@ -127,6 +127,13 @@ void MainWindow::on_bicubicButton_clicked() {
   ui->MainDisplay->updateBuffers(*currentMesh);
 }
 
+void MainWindow::on_radioButton_clicked() {
+  ui->MainDisplay->settings.currentTessellationShader = ShaderType::DISPLACEMENT;
+  ui->MainDisplay->settings.uniformUpdateRequired = true;
+  ui->MainDisplay->updateBuffers(*currentMesh);
+}
+
+
 void MainWindow::on_InnerTessLevel_valueChanged(int arg1) {
   ui->MainDisplay->settings.innerTessellationLevel = arg1;
   ui->MainDisplay->settings.uniformUpdateRequired = true;
@@ -138,3 +145,5 @@ void MainWindow::on_OuterTessLevel_valueChanged(int arg1) {
   ui->MainDisplay->settings.uniformUpdateRequired = true;
   ui->MainDisplay->update();
 }
+
+

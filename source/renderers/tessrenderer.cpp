@@ -24,6 +24,7 @@ TessellationRenderer::~TessellationRenderer() {
 void TessellationRenderer::initShaders() {
   shaders[ShaderType::BILINEAR] = constructTesselationShader("patch");
   shaders[ShaderType::BICUBIC] = constructTesselationShader("bicubic");
+  shaders[ShaderType::DISPLACEMENT] = constructTesselationShader("displace");
 }
 
 /**

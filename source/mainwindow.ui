@@ -250,6 +250,13 @@ QGroupBox::title {
          </widget>
         </item>
         <item>
+         <widget class="QRadioButton" name="radioButton">
+          <property name="text">
+           <string>Displacement</string>
+          </property>
+         </widget>
+        </item>
+        <item>
          <widget class="QLabel" name="label">
           <property name="text">
            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Tessellation levels:&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>

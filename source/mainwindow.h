@@ -38,6 +38,8 @@ private slots:
 
   void on_OuterTessLevel_valueChanged(int arg1);
 
+  void on_radioButton_clicked();
+
 private:
   void importOBJ(const QString &fileName);
 
