@@ -38,7 +38,7 @@ private slots:
 
   void on_OuterTessLevel_valueChanged(int arg1);
 
-  void on_radioButton_clicked();
+  void on_displacementButton_clicked();
 
 private:
   void importOBJ(const QString &fileName);

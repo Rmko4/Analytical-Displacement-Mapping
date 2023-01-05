@@ -101,7 +101,8 @@ void MainView::updateBuffers(Mesh &mesh) {
   mesh.extractAttributes();
   // Only extract/compute the following attributes when the corresponding mode
   // is selected.
-  if (settings.currentTessellationShader == ShaderType::BICUBIC) {
+  if (settings.currentTessellationShader == ShaderType::BICUBIC or
+      settings.currentTessellationShader == ShaderType::DISPLACEMENT) {
     mesh.computeRegularPatchIndices();
   }
   if (settings.limitProjectionMode) {

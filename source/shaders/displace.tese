@@ -17,7 +17,7 @@ uniform mat3 normalmatrix;
 uniform float innerTessLevel;
 uniform float outerTessLevel;
 
-const float freq = 3.F;
+const float freq = .5F;
 const float amplitude = .1F;
 
 const mat4 bicubicMt = mat4(-1, 3, -3, 1,
@@ -30,7 +30,15 @@ const mat3 biquadraticMt = mat3(1, -2,  1,
                                  1,  1,  0) / 2;
 
 float coeff(float u, float v) {
-  return amplitude * cos(2 * M_PI * freq * u) * cos(2 * M_PI * freq * v);
+  // return .1;
+  u = mod(u, 1);
+  v = mod(v, 1);
+  if(u == 0. || v == 0. || u == 1. || v == 1.) {
+    return 0.;
+  }
+  return amplitude;
+  
+  // return amplitude * sin(2 * M_PI * freq * u) * sin(2 * M_PI * freq * v);
 }
 
 vec3 baseSurfacePosition(float u, float v, mat4 Gx, mat4 Gy, mat4 Gz) {

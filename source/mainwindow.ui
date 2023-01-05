@@ -250,7 +250,7 @@ QGroupBox::title {
          </widget>
         </item>
         <item>
-         <widget class="QRadioButton" name="radioButton">
+         <widget class="QRadioButton" name="displacementButton">
           <property name="text">
            <string>Displacement</string>
           </property>
@@ -264,16 +264,16 @@ QGroupBox::title {
          </widget>
         </item>
         <item>
-         <layout class="QHBoxLayout" name="OuterTessLayout">
+         <layout class="QHBoxLayout" name="InnerTessLayout">
           <item>
-           <widget class="QLabel" name="OuterTessLabel">
+           <widget class="QLabel" name="InnerTessLabel">
             <property name="text">
              <string>Inner level:</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QSpinBox" name="OuterTessLevel">
+           <widget class="QSpinBox" name="InnerTessLevel">
             <property name="enabled">
              <bool>true</bool>
             </property>
@@ -288,16 +288,16 @@ QGroupBox::title {
          </layout>
         </item>
         <item>
-         <layout class="QHBoxLayout" name="InnerTessLayout">
+         <layout class="QHBoxLayout" name="OuterTessLayout">
           <item>
-           <widget class="QLabel" name="InnerTessLabel">
+           <widget class="QLabel" name="OuterTessLabel">
             <property name="text">
              <string>Outer level:</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QSpinBox" name="InnerTessLevel">
+           <widget class="QSpinBox" name="OuterTessLevel">
             <property name="enabled">
              <bool>true</bool>
             </property>
