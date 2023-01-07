@@ -71,8 +71,19 @@ float coeff(float u, float v) {
     case 2:
       return min(1.0, v * 5.0) * tess_amplitude;
     case 3:
-      return fract(sin(dot(vec2(u,v), vec2(12.9898, 78.233))) * 43758.5453) * tess_amplitude;
-
+    u = 7. * u;
+    v = 7.1 * v;
+    float u_f = floor(u);
+    float v_f = floor(v);
+    float u_c = ceil(u);
+    float v_c = ceil(v);
+    float r_ff = fract(sin(dot(vec2(u_f,v_f), vec2(12.9898, 78.233))) * 43758.5453) * tess_amplitude;
+    float r_fc = fract(sin(dot(vec2(u_f,v_c), vec2(12.9898, 78.233))) * 43758.5453) * tess_amplitude;
+    float r_cf = fract(sin(dot(vec2(u_c,v_f), vec2(12.9898, 78.233))) * 43758.5453) * tess_amplitude;
+    float r_cc = fract(sin(dot(vec2(u_c,v_c), vec2(12.9898, 78.233))) * 43758.5453) * tess_amplitude;
+    float a = mix(r_ff, r_cf, mod(u, 1.));
+    float b = mix(r_fc, r_cc, mod(u, 1.));
+    return mix(a, b, mod(v, 1.));
   }
 
   return fract(sin(dot(vec2(u,v), vec2(12.9898, 78.233))) * 43758.5453) * tess_amplitude;
