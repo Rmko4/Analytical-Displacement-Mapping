@@ -27,6 +27,7 @@ typedef struct Settings {
 
   // Displacement stuff:
   float amplitude = 0.2;
+  int displacement_mode = 0;
 
   bool uniformUpdateRequired = true;
 

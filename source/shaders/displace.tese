@@ -22,6 +22,8 @@ uniform float outerTessLevel;
 
 uniform float tess_amplitude;
 
+uniform int displacement_mode;
+
 const float freq = .5F;
 // const float amplitude = -.1F;
 
@@ -58,6 +60,20 @@ float coeff(float u, float v) {
 
   if (u > 0.5) // This is more than needed: also making each of the 4 triangle into two mirrored right angle triangles
     u = 1. - u;
+
+  switch(displacement_mode)
+  {
+    case 0:
+      return tess_amplitude * sin(2 * M_PI * freq * u) * sin(2 * M_PI * freq * v);
+    case 1:
+      if (v > 0.45) return 2 * tess_amplitude;
+      return min(1.0, v * 10.0) * tess_amplitude - tess_amplitude;
+    case 2:
+      return min(1.0, v * 5.0) * tess_amplitude;
+    case 3:
+      return fract(sin(dot(vec2(u,v), vec2(12.9898, 78.233))) * 43758.5453) * tess_amplitude;
+
+  }
 
   return fract(sin(dot(vec2(u,v), vec2(12.9898, 78.233))) * 43758.5453) * tess_amplitude;
   //return tess_amplitude * sin(2 * M_PI * freq * u) * sin(2 * M_PI * freq * v);
