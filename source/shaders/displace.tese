@@ -39,29 +39,25 @@ float coeff(float u, float v) {
   u = mod(u, 1.);
   v = mod(v, 1.);
 
-  // if (v <= u && 1. - u < v) {
-  //   float tmp = u;
-  //   u = v;
-  //   v = 1. - tmp;
-  // }
-  // else if (v > u && 1. - u <= v)
-  // {
-  //   u = 1. - u;
-  //   v = 1. - v;
-  // }
-  // else if (v >= u && 1. - u > v)
-  // {
-  // float tmp = u;
-  // u = 1. - v;
-  // v = tmp;
-  // }
-
-  if (u > 0.5) {
-    u = 1. - u;
+  if (v <= u && 1. - u < v) {
+    float tmp = u;
+    u = v;
+    v = 1. - tmp;
   }
-  if (v > 0.5) {
+  else if (v > u && 1. - u <= v)
+  {
+    u = 1. - u;
     v = 1. - v;
   }
+  else if (v >= u && 1. - u > v)
+  {
+    float tmp = u;
+    u = 1. - v;
+    v = tmp;
+  }
+
+  if (u > 0.5) // This is more than needed: also making each of the 4 triangle into two mirrored right angle triangles
+    u = 1. - u;
 
   return fract(sin(dot(vec2(u,v), vec2(12.9898, 78.233))) * 43758.5453) * tess_amplitude;
   //return tess_amplitude * sin(2 * M_PI * freq * u) * sin(2 * M_PI * freq * v);
