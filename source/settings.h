@@ -25,6 +25,9 @@ typedef struct Settings {
   float innerTessellationLevel = 1.F;
   float outerTessellationLevel = 1.F;
 
+  // Displacement stuff:
+  float amplitude = 0.2;
+
   bool uniformUpdateRequired = true;
 
   ShaderType currentMeshShader = ShaderType::PHONG;

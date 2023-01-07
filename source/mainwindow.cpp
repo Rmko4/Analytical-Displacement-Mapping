@@ -135,11 +135,6 @@ void MainWindow::on_displacementButton_clicked() {
 
 void MainWindow::on_InnerTessLevel_valueChanged(int arg1) {
   ui->MainDisplay->settings.innerTessellationLevel = arg1;
-  ui->MainDisplay->settings.uniformUpdateRequired = true;
-  ui->MainDisplay->update();
-}
-
-void MainWindow::on_OuterTessLevel_valueChanged(int arg1) {
   ui->MainDisplay->settings.outerTessellationLevel = arg1;
   ui->MainDisplay->settings.uniformUpdateRequired = true;
   ui->MainDisplay->update();
@@ -147,4 +142,12 @@ void MainWindow::on_OuterTessLevel_valueChanged(int arg1) {
 
 
 
+
+
+void MainWindow::on_amplitudeSlider_valueChanged(int value)
+{
+    ui->MainDisplay->settings.amplitude = static_cast<float>(value) / 50;
+    ui->MainDisplay->settings.uniformUpdateRequired = true;
+    ui->MainDisplay->update();
+}
 

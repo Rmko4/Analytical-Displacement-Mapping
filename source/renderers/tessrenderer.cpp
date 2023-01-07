@@ -124,6 +124,8 @@ void TessellationRenderer::updateUniforms() {
   uniInnerTessLevel = shader->uniformLocation("innerTessLevel");
   uniOuterTessLevel = shader->uniformLocation("outerTessLevel");
 
+  uniAmplitude = shader->uniformLocation("tess_amplitude");
+
   gl->glUniformMatrix4fv(uniModelViewMatrix, 1, false,
                          settings->modelViewMatrix.data());
   gl->glUniformMatrix4fv(uniProjectionMatrix, 1, false,
@@ -132,6 +134,8 @@ void TessellationRenderer::updateUniforms() {
                          settings->normalMatrix.data());
   gl->glUniform1f(uniInnerTessLevel, settings->innerTessellationLevel);
   gl->glUniform1f(uniOuterTessLevel, settings->outerTessellationLevel);
+
+  gl->glUniform1f(uniAmplitude, settings->amplitude);
 }
 
 /**

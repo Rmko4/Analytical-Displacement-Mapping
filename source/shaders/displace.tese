@@ -20,8 +20,10 @@ uniform mat3 normalmatrix;
 uniform float innerTessLevel;
 uniform float outerTessLevel;
 
+uniform float tess_amplitude;
+
 const float freq = .5F;
-const float amplitude = -.1F;
+// const float amplitude = -.1F;
 
 const mat4 bicubicMt = mat4(-1, 3, -3, 1,
                             3, -6, 3, 0,
@@ -33,16 +35,36 @@ const mat3 biquadraticMt = mat3(1, -2,  1,
                                  1,  1,  0) / 2;
 
 float coeff(float u, float v) {
-  // return .1;
+  // Forcing turnable symetry around 0.5, 0.5
   u = mod(u, 1.);
   v = mod(v, 1.);
-  // if(u == 0. || v == 0. || u == 1. || v == 1.) {
-  //   return 0.;
-  // }
-  // return amplitude;
-  // return amplitude * (0.5-abs(u-0.5))*(0.5-abs(v-0.5));
 
-  return amplitude * sin(2 * M_PI * freq * u) * sin(2 * M_PI * freq * v);
+  // if (v <= u && 1. - u < v) {
+  //   float tmp = u;
+  //   u = v;
+  //   v = 1. - tmp;
+  // }
+  // else if (v > u && 1. - u <= v)
+  // {
+  //   u = 1. - u;
+  //   v = 1. - v;
+  // }
+  // else if (v >= u && 1. - u > v)
+  // {
+  // float tmp = u;
+  // u = 1. - v;
+  // v = tmp;
+  // }
+
+  if (u > 0.5) {
+    u = 1. - u;
+  }
+  if (v > 0.5) {
+    v = 1. - v;
+  }
+
+  return fract(sin(dot(vec2(u,v), vec2(12.9898, 78.233))) * 43758.5453) * tess_amplitude;
+  //return tess_amplitude * sin(2 * M_PI * freq * u) * sin(2 * M_PI * freq * v);
 }
 
 vec3 baseSurfacePosition(float u, float v, mat4 Gx, mat4 Gy, mat4 Gz) {
@@ -135,7 +157,7 @@ void main() {
   vec3 Ns = baseSurfaceNormal(u, v, Gx, Gy, Gz);
   float D = offset(u, v);
   // float r = 1 / innerTessLevel;
-  // float D = amplitude * sin(2 * M_PI * freq * u) * sin(2 * M_PI * freq * v);
+  // float D = tess_amplitude * sin(2 * M_PI * freq * u) * sin(2 * M_PI * freq * v);
 
   vec3 f = s + Ns * D;
 

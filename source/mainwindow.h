@@ -36,9 +36,9 @@ private slots:
 
   void on_InnerTessLevel_valueChanged(int arg1);
 
-  void on_OuterTessLevel_valueChanged(int arg1);
-
   void on_displacementButton_clicked();
+
+  void on_amplitudeSlider_valueChanged(int value);
 
 private:
   void importOBJ(const QString &fileName);

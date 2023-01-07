@@ -206,7 +206,7 @@ QGroupBox::title {
          <x>10</x>
          <y>250</y>
          <width>201</width>
-         <height>201</height>
+         <height>171</height>
         </rect>
        </property>
        <property name="title">
@@ -257,47 +257,16 @@ QGroupBox::title {
          </widget>
         </item>
         <item>
-         <widget class="QLabel" name="label">
-          <property name="text">
-           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Tessellation levels:&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-          </property>
-         </widget>
-        </item>
-        <item>
          <layout class="QHBoxLayout" name="InnerTessLayout">
           <item>
            <widget class="QLabel" name="InnerTessLabel">
             <property name="text">
-             <string>Inner level:</string>
+             <string>Tesselation level</string>
             </property>
            </widget>
           </item>
           <item>
            <widget class="QSpinBox" name="InnerTessLevel">
-            <property name="enabled">
-             <bool>true</bool>
-            </property>
-            <property name="maximum">
-             <number>64</number>
-            </property>
-            <property name="value">
-             <number>1</number>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <layout class="QHBoxLayout" name="OuterTessLayout">
-          <item>
-           <widget class="QLabel" name="OuterTessLabel">
-            <property name="text">
-             <string>Outer level:</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QSpinBox" name="OuterTessLevel">
             <property name="enabled">
              <bool>true</bool>
             </property>
@@ -317,9 +286,9 @@ QGroupBox::title {
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>470</y>
+         <y>430</y>
          <width>201</width>
-         <height>81</height>
+         <height>71</height>
         </rect>
        </property>
        <property name="title">
@@ -356,6 +325,92 @@ QGroupBox::title {
          </widget>
         </item>
        </layout>
+      </widget>
+      <widget class="QGroupBox" name="displacementGroupBox">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>510</y>
+         <width>201</width>
+         <height>241</height>
+        </rect>
+       </property>
+       <property name="title">
+        <string>Displacement</string>
+       </property>
+       <widget class="QWidget" name="verticalLayoutWidget">
+        <property name="geometry">
+         <rect>
+          <x>9</x>
+          <y>19</y>
+          <width>191</width>
+          <height>221</height>
+         </rect>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_4">
+         <item>
+          <widget class="QLabel" name="amplitudeLabel">
+           <property name="text">
+            <string>Amplitude:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QSlider" name="amplitudeSlider">
+           <property name="minimum">
+            <number>-50</number>
+           </property>
+           <property name="maximum">
+            <number>50</number>
+           </property>
+           <property name="value">
+            <number>10</number>
+           </property>
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="dispTextLabel">
+           <property name="text">
+            <string>Displacement texture:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QRadioButton" name="radioButton">
+           <property name="text">
+            <string>Bubblewrap</string>
+           </property>
+           <property name="checked">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QRadioButton" name="radioButton_2">
+           <property name="text">
+            <string>Pinhead</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QRadioButton" name="radioButton_3">
+           <property name="text">
+            <string>Chocolate bar</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QRadioButton" name="radioButton_4">
+           <property name="text">
+            <string>Random</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
       </widget>
      </widget>
     </item>
