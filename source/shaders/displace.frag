@@ -3,6 +3,8 @@
 
 layout(location = 0) in vec3 vertcoords_fs;
 layout(location = 1) in vec3 vertnormal_fs;
+layout(location = 2) out vec3 vertbasesurfacedu_fs;
+layout(location = 3) out vec3 vertbasesurfacedv_fs;
 
 out vec4 fColor;
 

@@ -4,14 +4,17 @@ import numpy as np
 
 # %%
 amplitude = 1
-innerTessLevel = 3
+innerTessLevel = 5
 r = 1 / innerTessLevel
 
-u = 2/3
-v = 2/3
+u = 0.8
+v = 0.8
 
 U = np.array([0.5*0.5, 0.5, 1])
 V = np.array([0.5*0.5, 0.5, 1])
+
+dU = np.array([1, 1, 0])
+dV = np.array([1, 1, 0])
 
 biquadraticMt = np.array([[1, -2, 1],
                           [-2, 2, 0],
@@ -27,10 +30,16 @@ def coeff(u, v):
 
 
 # %%
-coeffecients = np.array([[coeff(u - r, v + r), coeff(u, v + r), coeff(u + r, v + r)],
+coeffecients = np.array([[coeff(u - r, v - r), coeff(u, v - r), coeff(u + r, v - r)],
                         [coeff(u - r, v), coeff(u, v), coeff(u + r, v)],
-                        [coeff(u - r, v - r), coeff(u, v - r), coeff(u + r, v - r)]])
+                        [coeff(u - r, v + r), coeff(u, v + r), coeff(u + r, v + r)]])
 
 D = np.dot(biquadraticMt @ U, coeffecients @ biquadraticMt @ V)
+x = biquadraticMt @ V
+res = np.dot(x, coeffecients[:,1])
+y = biquadraticMt @ dU
+dUs = np.dot(y, coeffecients @ x)
+dVs = np.dot(x, coeffecients @ y)
+
 
 # %%
