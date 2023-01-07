@@ -278,7 +278,7 @@ QGroupBox::title {
              <bool>true</bool>
             </property>
             <property name="maximum">
-             <number>8</number>
+             <number>64</number>
             </property>
             <property name="value">
              <number>1</number>
@@ -302,7 +302,7 @@ QGroupBox::title {
              <bool>true</bool>
             </property>
             <property name="maximum">
-             <number>8</number>
+             <number>64</number>
             </property>
             <property name="value">
              <number>1</number>

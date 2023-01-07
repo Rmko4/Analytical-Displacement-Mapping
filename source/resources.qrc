@@ -15,6 +15,9 @@
         <file>shaders/displace.tesc</file>
         <file>shaders/displace.tese</file>
         <file>shaders/displace.vert</file>
+        <file>models/5x5_plane.obj</file>
+        <file>models/5x5_plane_random_height.obj</file>
+        <file>models/RegularGrid.obj</file>
     </qresource>
     <qresource prefix="/models">
         <file alias="Suzanne.obj">models/SuzanneQuad.obj</file>
@@ -30,5 +33,7 @@
         <file alias="FancyCup.obj">models/FancyCup.obj</file>
         <file alias="Brick.obj">models/Brick.obj</file>
         <file>models/RegularGrid.obj</file>
+        <file>models/5x5_plane.obj</file>
+        <file>models/5x5_plane_random_height.obj</file>
     </qresource>
 </RCC>

@@ -18,7 +18,7 @@ uniform float innerTessLevel;
 uniform float outerTessLevel;
 
 const float freq = .5F;
-const float amplitude = .1F;
+const float amplitude = 0.1F;
 
 const mat4 bicubicMt = mat4(-1, 3, -3, 1,
                             3, -6, 3, 0,
@@ -31,14 +31,15 @@ const mat3 biquadraticMt = mat3(1, -2,  1,
 
 float coeff(float u, float v) {
   // return .1;
-  u = mod(u, 1);
-  v = mod(v, 1);
-  if(u == 0. || v == 0. || u == 1. || v == 1.) {
-    return 0.;
-  }
-  return amplitude;
-  
-  // return amplitude * sin(2 * M_PI * freq * u) * sin(2 * M_PI * freq * v);
+  u = mod(u, 1.);
+  v = mod(v, 1.);
+  // if(u == 0. || v == 0. || u == 1. || v == 1.) {
+  //   return 0.;
+  // }
+  // return amplitude;
+  // return amplitude * (0.5-abs(u-0.5))*(0.5-abs(v-0.5));
+
+  return amplitude * sin(2 * M_PI * freq * u) * sin(2 * M_PI * freq * v);
 }
 
 vec3 baseSurfacePosition(float u, float v, mat4 Gx, mat4 Gy, mat4 Gz) {
@@ -81,8 +82,8 @@ vec3 baseSurfaceNormal(float u, float v, mat4 Gx, mat4 Gy, mat4 Gz) {
 
 float offset(float u, float v) {
   // For now consider uniform tessellation levels.
-  vec3 U = vec3(u*u, u, 1);
-  vec3 V = vec3(v*v, v, 1);
+  vec3 U = vec3(0.5*0.5, 0.5, 1);
+  vec3 V = vec3(0.5*0.5, 0.5, 1);
 
   float r = 1 / innerTessLevel;
 
@@ -126,6 +127,8 @@ void main() {
   vec3 s = baseSurfacePosition(u, v, Gx, Gy, Gz);
   vec3 Ns = baseSurfaceNormal(u, v, Gx, Gy, Gz);
   float D = offset(u, v);
+  // float r = 1 / innerTessLevel;
+  // float D = amplitude * sin(2 * M_PI * freq * u) * sin(2 * M_PI * freq * v);
 
   vec3 f = s + Ns * D;
 

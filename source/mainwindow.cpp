@@ -42,7 +42,6 @@ void MainWindow::importOBJ(const QString &fileName) {
   if (newModel.loadedSuccessfully()) {
     MeshInitializer meshInitializer;
     meshes.append(meshInitializer.constructHalfEdgeMesh(newModel));
-    // TODO check for limit projection
     ui->MainDisplay->updateBuffers(meshes[0]);
     currentMesh = &meshes[0];
     ui->MainDisplay->settings.modelLoaded = true;
