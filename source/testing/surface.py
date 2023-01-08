@@ -7,8 +7,8 @@ amplitude = 1
 innerTessLevel = 5
 r = 1 / innerTessLevel
 
-u = 0.8
-v = 0.8
+u = 0.4
+v = 0.4
 
 U = np.array([0.5*0.5, 0.5, 1])
 V = np.array([0.5*0.5, 0.5, 1])

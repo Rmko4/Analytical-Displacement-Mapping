@@ -137,6 +137,9 @@ float offset(float u, float v) {
   vec3 U = vec3(0.5*0.5, 0.5, 1);
   vec3 V = vec3(0.5*0.5, 0.5, 1);
 
+  // vec3 U = vec3(u*u, u, 1);
+  // vec3 V = vec3(v*v, v, 1);
+
   float r = 1 / innerTessLevel;
 
   mat3 coefficients = mat3(coeff(u - r, v + r), coeff(u, v + r), coeff(u + r, v + r),
@@ -196,8 +199,8 @@ void main() {
                            coeff(u - r, v), coeff(u, v), coeff(u + r, v),
                            coeff(u - r, v + r), coeff(u, v + r), coeff(u + r, v + r));
 
-  float dDdu = dot(biquadraticMt * dU, coefficients * biquadraticMt * V);
-  float dDdv = dot(biquadraticMt * U, coefficients * biquadraticMt * dV);
+  float dDdu = innerTessLevel * dot(biquadraticMt * dU, coefficients * biquadraticMt * V);
+  float dDdv = innerTessLevel * dot(biquadraticMt * U, coefficients * biquadraticMt * dV);
 
   vec4 U4 = vec4(u*u*u, u*u, u, 1);
   vec4 V4 = vec4(v*v*v, v*v, v, 1);
