@@ -11,7 +11,12 @@ layout(location = 0) out vec3 vertcoords_te;
 layout(location = 1) out vec3 vertnormals_te;
 layout(location = 2) out vec3 vertbasesurfacedu_te;
 layout(location = 3) out vec3 vertbasesurfacedv_te;
+layout(location = 4) out vec3 vertbasenormal;
 
+out float vertU;
+out float vertV;
+
+out float tileSize;
 
 uniform mat4 modelviewmatrix;
 uniform mat4 projectionmatrix;
@@ -124,9 +129,6 @@ vec3 baseSurfaceNormal(float u, float v, mat4 Gx, mat4 Gy, mat4 Gz) {
   vec3 sU = vec3(tanUX, tanUY, tanUZ);
   vec3 sV = vec3(tanVX, tanVY, tanVZ);
 
-  vertbasesurfacedu_te = sU;
-  vertbasesurfacedv_te = sV;
-
   vec3 normalS = normalize(cross(sU, sV));
 
   return normalS;
@@ -218,6 +220,16 @@ void main() {
   // Cross product of tangent lines yields normal
   vec3 dsdu = vec3(tanUX, tanUY, tanUZ);
   vec3 dsdv = vec3(tanVX, tanVY, tanVZ);
+
+  vertU = u;
+  vertV = v;
+
+  vertbasesurfacedu_te = dsdu;
+  vertbasesurfacedv_te = dsdv;
+
+  vertbasenormal = Ns;
+
+  tileSize = innerTessLevel;
 
   // Approximate shading
   vec3 dfdu = dsdu + Ns * dDdu;
