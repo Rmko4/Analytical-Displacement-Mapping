@@ -33,6 +33,7 @@ class TessellationRenderer : public Renderer {
   // Uniforms
   GLint uniModelViewMatrix, uniProjectionMatrix, uniNormalMatrix;
   GLint uniInnerTessLevel, uniOuterTessLevel;
+  GLint uniTessDetail;
   GLint uniAmplitude, uniDisplacementMode;
 };
 

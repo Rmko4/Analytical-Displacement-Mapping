@@ -280,6 +280,26 @@ QGroupBox::title {
           </item>
          </layout>
         </item>
+        <item>
+         <widget class="QLabel" name="detailLabel">
+          <property name="text">
+           <string>Detail multiplier:</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QSlider" name="detailSlider">
+          <property name="pageStep">
+           <number>10</number>
+          </property>
+          <property name="value">
+           <number>5</number>
+          </property>
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+         </widget>
+        </item>
        </layout>
       </widget>
       <widget class="QGroupBox" name="MeshRenderGroupBox">

@@ -140,46 +140,52 @@ void MainWindow::on_InnerTessLevel_valueChanged(int arg1) {
   ui->MainDisplay->update();
 }
 
-
-
+void MainWindow::on_detailSlider_valueChanged(int value) {
+  ui->MainDisplay->settings.amplitude = static_cast<float>(value) / 50;
+  ui->MainDisplay->settings.uniformUpdateRequired = true;
+  ui->MainDisplay->update();
+}
 
 
 void MainWindow::on_amplitudeSlider_valueChanged(int value)
 {
-    ui->MainDisplay->settings.amplitude = static_cast<float>(value) / 50;
-    ui->MainDisplay->settings.uniformUpdateRequired = true;
-    ui->MainDisplay->update();
+  ui->MainDisplay->settings.amplitude = static_cast<float>(value) / 50;
+  ui->MainDisplay->settings.uniformUpdateRequired = true;
+  ui->MainDisplay->update();
 }
 
 
 void MainWindow::on_radioButton_clicked()
 {
-    ui->MainDisplay->settings.displacement_mode = 0;
-    ui->MainDisplay->settings.uniformUpdateRequired = true;
-    ui->MainDisplay->update();
+  ui->MainDisplay->settings.displacement_mode = 0;
+  ui->MainDisplay->settings.uniformUpdateRequired = true;
+  ui->MainDisplay->update();
 }
 
 
 void MainWindow::on_radioButton_2_clicked()
 {
-    ui->MainDisplay->settings.displacement_mode = 1;
-    ui->MainDisplay->settings.uniformUpdateRequired = true;
-    ui->MainDisplay->update();
+  ui->MainDisplay->settings.displacement_mode = 1;
+  ui->MainDisplay->settings.uniformUpdateRequired = true;
+  ui->MainDisplay->update();
 }
 
 
 void MainWindow::on_radioButton_3_clicked()
 {
-    ui->MainDisplay->settings.displacement_mode = 2;
-    ui->MainDisplay->settings.uniformUpdateRequired = true;
-    ui->MainDisplay->update();
+  ui->MainDisplay->settings.displacement_mode = 2;
+  ui->MainDisplay->settings.uniformUpdateRequired = true;
+  ui->MainDisplay->update();
 }
 
 
 void MainWindow::on_radioButton_4_clicked()
 {
-    ui->MainDisplay->settings.displacement_mode = 3;
-    ui->MainDisplay->settings.uniformUpdateRequired = true;
-    ui->MainDisplay->update();
+  ui->MainDisplay->settings.displacement_mode = 3;
+  ui->MainDisplay->settings.uniformUpdateRequired = true;
+  ui->MainDisplay->update();
 }
+
+
+
 

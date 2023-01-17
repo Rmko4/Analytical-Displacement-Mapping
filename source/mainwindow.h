@@ -48,6 +48,8 @@ private slots:
 
   void on_radioButton_4_clicked();
 
+  void on_detailSlider_valueChanged(int value);
+
 private:
   void importOBJ(const QString &fileName);
 

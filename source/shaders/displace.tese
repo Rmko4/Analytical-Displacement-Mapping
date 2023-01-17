@@ -7,6 +7,8 @@ layout(quads, equal_spacing, ccw) in;
 layout(location = 0) in vec3[] vertcoords_tc;
 layout(location = 1) in vec3[] vertnormals_tc;
 
+in vec3[] tessDetail;
+
 layout(location = 0) out vec3 vertcoords_te;
 layout(location = 1) out vec3 vertnormals_te;
 layout(location = 2) out vec3 vertbasesurfacedu_te;
@@ -173,20 +175,20 @@ void main() {
   */
 
   // Use three control point matrices, one for each spatial dimension.
-  mat4 Gx = mat4(vertcoords_tc[15].x, vertcoords_tc[12].x, vertcoords_tc[2].x, vertcoords_tc[3].x,
-              vertcoords_tc[14].x, vertcoords_tc[13].x, vertcoords_tc[1].x, vertcoords_tc[0].x,
-              vertcoords_tc[8].x, vertcoords_tc[9].x, vertcoords_tc[5].x, vertcoords_tc[6].x,
-              vertcoords_tc[11].x, vertcoords_tc[10].x, vertcoords_tc[4].x, vertcoords_tc[7].x);
+  mat4 Gx = mat4(vertcoords_tc[0].x, vertcoords_tc[1].x, vertcoords_tc[2].x, vertcoords_tc[3].x,
+              vertcoords_tc[4].x, vertcoords_tc[5].x, vertcoords_tc[6].x, vertcoords_tc[7].x,
+              vertcoords_tc[8].x, vertcoords_tc[9].x, vertcoords_tc[10].x, vertcoords_tc[11].x,
+              vertcoords_tc[12].x, vertcoords_tc[13].x, vertcoords_tc[14].x, vertcoords_tc[15].x);
 
-  mat4 Gy = mat4(vertcoords_tc[15].y, vertcoords_tc[12].y, vertcoords_tc[2].y, vertcoords_tc[3].y,
-              vertcoords_tc[14].y, vertcoords_tc[13].y, vertcoords_tc[1].y, vertcoords_tc[0].y,
-              vertcoords_tc[8].y, vertcoords_tc[9].y, vertcoords_tc[5].y, vertcoords_tc[6].y,
-              vertcoords_tc[11].y, vertcoords_tc[10].y, vertcoords_tc[4].y, vertcoords_tc[7].y);
+  mat4 Gy = mat4(vertcoords_tc[0].y, vertcoords_tc[1].y, vertcoords_tc[2].y, vertcoords_tc[3].y,
+              vertcoords_tc[4].y, vertcoords_tc[5].y, vertcoords_tc[6].y, vertcoords_tc[7].y,
+              vertcoords_tc[8].y, vertcoords_tc[9].y, vertcoords_tc[10].y, vertcoords_tc[11].y,
+              vertcoords_tc[12].y, vertcoords_tc[13].y, vertcoords_tc[14].y, vertcoords_tc[15].y);
 
-  mat4 Gz = mat4(vertcoords_tc[15].z, vertcoords_tc[12].z, vertcoords_tc[2].z, vertcoords_tc[3].z,
-              vertcoords_tc[14].z, vertcoords_tc[13].z, vertcoords_tc[1].z, vertcoords_tc[0].z,
-              vertcoords_tc[8].z, vertcoords_tc[9].z, vertcoords_tc[5].z, vertcoords_tc[6].z,
-              vertcoords_tc[11].z, vertcoords_tc[10].z, vertcoords_tc[4].z, vertcoords_tc[7].z);
+  mat4 Gz = mat4(vertcoords_tc[0].z, vertcoords_tc[1].z, vertcoords_tc[2].z, vertcoords_tc[3].z,
+              vertcoords_tc[4].z, vertcoords_tc[5].z, vertcoords_tc[6].z, vertcoords_tc[7].z,
+              vertcoords_tc[8].z, vertcoords_tc[9].z, vertcoords_tc[10].z, vertcoords_tc[11].z,
+              vertcoords_tc[12].z, vertcoords_tc[13].z, vertcoords_tc[14].z, vertcoords_tc[15].z);
 
 
   vec3 s = baseSurfacePosition(u, v, Gx, Gy, Gz);
