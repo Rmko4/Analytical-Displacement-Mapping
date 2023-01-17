@@ -18,6 +18,10 @@ out float vertV;
 
 out float tileSize;
 
+out float vertdisplacement;
+out vec3 vertbasenormaldu;
+out vec3 vertbasenormaldv;
+
 uniform mat4 modelviewmatrix;
 uniform mat4 projectionmatrix;
 uniform mat3 normalmatrix;
@@ -199,6 +203,8 @@ void main() {
   vec3 dU = vec3(2*0.5, 1, 0);
   vec3 dV = vec3(2*0.5, 1, 0);
 
+
+
   float r = 1 / innerTessLevel;
 
   mat3 coefficients = mat3(coeff(u - r, v - r), coeff(u, v - r), coeff(u + r, v - r),
@@ -212,7 +218,7 @@ void main() {
   vec4 V4 = vec4(v*v*v, v*v, v, 1);
 
   vec4 dU4 = vec4(3*u*u, 2*u, 1, 0);
-  vec4 dV4 = vec4(3*v*v, 2*v, 1, 0); 
+  vec4 dV4 = vec4(3*v*v, 2*v, 1, 0);
 
   float tanUX = dot(bicubicMt * dU4, Gx * bicubicMt * V4);
   float tanUY = dot(bicubicMt * dU4, Gy * bicubicMt * V4);
@@ -225,6 +231,48 @@ void main() {
   vec3 dsdu = vec3(tanUX, tanUY, tanUZ);
   vec3 dsdv = vec3(tanVX, tanVY, tanVZ);
 
+
+  vec4 dUU4 = vec4(6*u, 2, 0, 0);
+  vec4 dVV4 = vec4(6*v, 2, 0, 0);
+
+  float tanUUX = dot(bicubicMt * dUU4, Gx * bicubicMt * V4);
+  float tanUUY = dot(bicubicMt * dUU4, Gy * bicubicMt * V4);
+  float tanUUZ = dot(bicubicMt * dUU4, Gz * bicubicMt * V4);
+
+  vec3 dsduu = vec3(tanUUX, tanUUY, tanUUZ);
+
+  float tanVVX = dot(bicubicMt * U4, Gx * bicubicMt * dVV4);
+  float tanVVY = dot(bicubicMt * U4, Gy * bicubicMt * dVV4);
+  float tanVVZ = dot(bicubicMt * U4, Gz * bicubicMt * dVV4);
+
+  vec3 dsdvv = vec3(tanVVX, tanVVY, tanVVZ);
+
+  float tanUVX = dot(bicubicMt * dU4, Gx * bicubicMt * dV4);
+  float tanUVY = dot(bicubicMt * dU4, Gy * bicubicMt * dV4);
+  float tanUVZ = dot(bicubicMt * dU4, Gz * bicubicMt * dV4);
+
+  vec3 dsduv = vec3(tanUVX, tanUVY, tanUVZ);
+
+
+  float lenDsdu = length(dsdu);
+  float lenDsdv = length(dsdv);
+
+  float Ec = lenDsdu * lenDsdu;
+  float Fc = dot(dsdu, dsdv);
+  float Gc = lenDsdv * lenDsdv;
+
+  float ec = dot(Ns, dsduu);
+  float fc = dot(Ns, dsduv);
+  float gc = dot(Ns, dsdvv);
+
+  vec3 dNsnndu = dsdu * (fc*Fc - ec*Gc) / (Ec*Gc - Fc*Fc) + dsdv * (ec*Fc - fc*Ec) / (Ec*Gc- Fc*Fc);
+  vec3 dNsnndv = dsdv * (fc*Fc - ec*Gc) / (Ec*Gc - Fc*Fc) + dsdu * (ec*Fc - fc*Ec) / (Ec*Gc - Fc*Fc);
+
+  float NsLength = length(cross(dsdu, dsdv));
+
+  vec3 dNsdu = dNsnndu - Ns * (dot(dNsnndu, Ns)) / (NsLength * NsLength);
+  vec3 dNsdv = dNsnndv - Ns * (dot(dNsnndv, Ns)) / (NsLength * NsLength);
+
   vertU = u;
   vertV = v;
 
@@ -232,6 +280,10 @@ void main() {
   vertbasesurfacedv_te = dsdv;
 
   vertbasenormal = Ns;
+
+  vertdisplacement = D;
+  vertbasenormaldu = dNsdu;
+  vertbasenormaldv = dNsdv;
 
   tileSize = innerTessLevel;
 

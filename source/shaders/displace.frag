@@ -15,6 +15,11 @@ in float vertV;
 
 in float tileSize;
 
+in float vertdisplacement;
+in vec3 vertbasenormaldu;
+in vec3 vertbasenormaldv;
+
+
 out vec4 fColor;
 
 
@@ -100,6 +105,12 @@ void main() {
   vec3 dsdu = vertbasesurfacedu_fs;
   vec3 dsdv = vertbasesurfacedv_fs;
 
+  float D = vertdisplacement;
+
+  vec3 dNsdu = vertbasenormaldu;
+  vec3 dNsdv = vertbasenormaldv;
+
+
   float r = 1 / tileSize;
 
 // Yields the center coordinates [0,1], such that it is on k*r for any positive integer k.
@@ -130,8 +141,8 @@ void main() {
   float dDdv = tileSize * dot(biquadraticMt * U, coefficients * biquadraticMt * dV);
 
   // Approximate shading
-  vec3 dfdu = dsdu + Ns * dDdu;
-  vec3 dfdv = dsdv + Ns * dDdv;
+  vec3 dfdu = dsdu + Ns * dDdu + dNsdu * D;
+  vec3 dfdv = dsdv + Ns * dDdv + dNsdv * D;
 
   vec3 normalF = normalize(cross(dfdu, dfdv));
   normalF = normalize(normalmatrix * normalF);
