@@ -155,6 +155,7 @@ void main() {
   // vec3 col = phongShading(matcolour, vertcoords_fs, vertnormal_fs);
 
   // vec3 col = vec3(0.2 * dDdu, 0.2 * dDdv, 0);
+  // vec3 col = vec3(dNsdu[0], dNsdu[1], dNsdu[2]);
   vec3 col = phongShading(matcolour, vertcoords_fs, normalF);
 
   fColor = vec4(col, 1.0);

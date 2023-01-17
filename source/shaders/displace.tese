@@ -270,8 +270,8 @@ void main() {
 
   float NsLength = length(cross(dsdu, dsdv));
 
-  vec3 dNsdu = dNsnndu - Ns * (dot(dNsnndu, Ns)) / (NsLength * NsLength);
-  vec3 dNsdv = dNsnndv - Ns * (dot(dNsnndv, Ns)) / (NsLength * NsLength);
+  vec3 dNsdu = dNsnndu - Ns * (dot(dNsnndu, Ns)) / NsLength;
+  vec3 dNsdv = dNsnndv - Ns * (dot(dNsnndv, Ns)) / NsLength;
 
   vertU = u;
   vertV = v;
