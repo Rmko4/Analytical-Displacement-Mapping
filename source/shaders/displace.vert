@@ -16,7 +16,7 @@ void main() {
   gl_Position = vec4(vertcoords_vs, 1.0);
 
   vec4 viewPos = modelviewmatrix * gl_Position;
-  tessFactor = tessDetail * length(viewPos.xyz);
+  tessFactor = tessDetail / length(viewPos.xyz);
 
   vertcoords_vs = vertcoords;
   vertnormal_vs = vertnormal;

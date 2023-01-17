@@ -50,6 +50,8 @@ private slots:
 
   void on_detailSlider_valueChanged(int value);
 
+  void on_levelOfDetailCheckBox_clicked(bool checked);
+
 private:
   void importOBJ(const QString &fileName);
 

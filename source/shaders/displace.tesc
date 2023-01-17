@@ -5,21 +5,28 @@ layout(vertices = 16) out;
 layout(location = 0) in vec3[] vertcoords_vs;
 layout(location = 1) in vec3[] vertnormals_vs;
 
+in vec3[] tessDetail;
+
 layout(location = 0) out vec3[] vertcoords_tc;
 layout(location = 1) out vec3[] vertnormals_tc;
 
+
+uniform bool dynamicLoD;
 uniform float innerTessLevel;
 uniform float outerTessLevel;
 
 void main() {
   if (gl_InvocationID == 0) {
-    gl_TessLevelOuter[0] = outerTessLevel;
-    gl_TessLevelOuter[1] = outerTessLevel;
-    gl_TessLevelOuter[2] = outerTessLevel;
-    gl_TessLevelOuter[3] = outerTessLevel;
+    if (dynamicLoD) {
+    } else {
+      gl_TessLevelOuter[0] = outerTessLevel;
+      gl_TessLevelOuter[1] = outerTessLevel;
+      gl_TessLevelOuter[2] = outerTessLevel;
+      gl_TessLevelOuter[3] = outerTessLevel;
 
-    gl_TessLevelInner[0] = innerTessLevel;
-    gl_TessLevelInner[1] = innerTessLevel;
+      gl_TessLevelInner[0] = innerTessLevel;
+      gl_TessLevelInner[1] = innerTessLevel;
+    }
   }
 
   // simply pass through everything. Note that you can also simply use the

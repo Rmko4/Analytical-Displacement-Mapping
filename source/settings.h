@@ -25,6 +25,7 @@ typedef struct Settings {
   float innerTessellationLevel = 1.F;
   float outerTessellationLevel = 1.F;
 
+  bool dynamicLoD = false;
   float tessDetail = 5.F;
 
   // Displacement stuff:

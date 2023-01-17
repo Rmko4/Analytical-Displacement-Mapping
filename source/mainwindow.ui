@@ -206,7 +206,7 @@ QGroupBox::title {
          <x>10</x>
          <y>250</y>
          <width>201</width>
-         <height>171</height>
+         <height>221</height>
         </rect>
        </property>
        <property name="title">
@@ -281,6 +281,13 @@ QGroupBox::title {
          </layout>
         </item>
         <item>
+         <widget class="QCheckBox" name="levelOfDetailCheckBox">
+          <property name="text">
+           <string>Level-of-Detail</string>
+          </property>
+         </widget>
+        </item>
+        <item>
          <widget class="QLabel" name="detailLabel">
           <property name="text">
            <string>Detail multiplier:</string>
@@ -306,7 +313,7 @@ QGroupBox::title {
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>430</y>
+         <y>480</y>
          <width>201</width>
          <height>71</height>
         </rect>
@@ -350,9 +357,9 @@ QGroupBox::title {
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>510</y>
+         <y>560</y>
          <width>201</width>
-         <height>241</height>
+         <height>181</height>
         </rect>
        </property>
        <property name="title">
@@ -361,10 +368,10 @@ QGroupBox::title {
        <widget class="QWidget" name="verticalLayoutWidget">
         <property name="geometry">
          <rect>
-          <x>9</x>
-          <y>19</y>
+          <x>10</x>
+          <y>20</y>
           <width>191</width>
-          <height>221</height>
+          <height>173</height>
          </rect>
         </property>
         <layout class="QVBoxLayout" name="verticalLayout_4">

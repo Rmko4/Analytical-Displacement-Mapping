@@ -7,8 +7,6 @@ layout(quads, equal_spacing, ccw) in;
 layout(location = 0) in vec3[] vertcoords_tc;
 layout(location = 1) in vec3[] vertnormals_tc;
 
-in vec3[] tessDetail;
-
 layout(location = 0) out vec3 vertcoords_te;
 layout(location = 1) out vec3 vertnormals_te;
 layout(location = 2) out vec3 vertbasesurfacedu_te;
