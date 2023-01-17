@@ -41,6 +41,10 @@ const mat3 biquadraticMt = mat3(1, -2,  1,
                                 -2,  2,  0,
                                  1,  1,  0) / 2;
 
+const mat3 biquadraticM = mat3(1, -2,  1,
+                                -2,  2,  1,
+                                 1,  0,  0) / 2;
+
 float coeff(float u, float v) {
   // Forcing turnable symetry around 0.5, 0.5
   u = mod(u, 1.);
@@ -71,7 +75,7 @@ float coeff(float u, float v) {
     case 0:
       return tess_amplitude * sin(2 * M_PI * freq * u) * sin(2 * M_PI * freq * v);
     case 1:
-      if (v > 0.45) return 2 * tess_amplitude;
+      if (v > 0.4501) return 2 * tess_amplitude;
       return min(1.0, v * 10.0) * tess_amplitude - tess_amplitude;
     case 2:
       return min(1.0, v * 5.0) * tess_amplitude;
@@ -144,9 +148,9 @@ float offset(float u, float v) {
 
   float r = 1 / innerTessLevel;
 
-  mat3 coefficients = mat3(coeff(u - r, v + r), coeff(u, v + r), coeff(u + r, v + r),
+  mat3 coefficients = mat3(coeff(u - r, v - r), coeff(u, v - r), coeff(u + r, v - r),
                            coeff(u - r, v), coeff(u, v), coeff(u + r, v),
-                           coeff(u - r, v - r), coeff(u, v - r), coeff(u + r, v - r));
+                           coeff(u - r, v + r), coeff(u, v + r), coeff(u + r, v + r));
 
   float D = dot(biquadraticMt * U, coefficients * biquadraticMt * V);
   return D;
@@ -185,7 +189,7 @@ void main() {
   vec3 Ns = baseSurfaceNormal(u, v, Gx, Gy, Gz);
   float D = offset(u, v);
   // float r = 1 / innerTessLevel;
-  // float D = tess_amplitude * sin(2 * M_PI * freq * u) * sin(2 * M_PI * freq * v);
+  // float D = coeff(u, v);
 
   vec3 f = s + Ns * D;
 

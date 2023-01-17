@@ -36,6 +36,7 @@ const mat3 biquadraticMt = mat3(1, -2,  1,
                                 -2,  2,  0,
                                  1,  1,  0) / 2;
 
+
 float coeff(float u, float v) {
   // Forcing turnable symetry around 0.5, 0.5
   u = mod(u, 1.);
@@ -66,7 +67,7 @@ float coeff(float u, float v) {
     case 0:
       return tess_amplitude * sin(2 * M_PI * freq * u) * sin(2 * M_PI * freq * v);
     case 1:
-      if (v > 0.45) return 2 * tess_amplitude;
+      if (v > 0.4501) return 2 * tess_amplitude;
       return min(1.0, v * 10.0) * tess_amplitude - tess_amplitude;
     case 2:
       return min(1.0, v * 5.0) * tess_amplitude;
@@ -91,7 +92,7 @@ float coeff(float u, float v) {
 }
 
 void main() {
-  float u = subpatchTransform(vertU);
+  float u = subpatchTransform(vertU); // Maps to [0,1]
   float v = subpatchTransform(vertV);
 
   vec3 Ns = vertbasenormal;
@@ -101,23 +102,28 @@ void main() {
 
   float r = 1 / tileSize;
 
+// Yields the center coordinates [0,1], such that it is on k*r for any positive integer k.
+  // float uC = vertU;
+  // float vC = vertV;
+  
+  float uC = vertU + r * (0.5 - u); 
+  float vC = vertV + r * (0.5 - v);  
+  
+  mat3 coefficients = mat3(coeff(uC - r, vC - r), coeff(uC, vC - r), coeff(uC + r, vC - r),
+                          coeff(uC - r, vC), coeff(uC, vC), coeff(uC + r, vC),
+                          coeff(uC - r, vC + r), coeff(uC, vC + r), coeff(uC + r, vC + r));
 
-  // TODO: Determine the required coordinates
-  mat3 coefficients = mat3(coeff(vertU - r, vertV - r), coeff(vertU, vertV - r), coeff(vertU + r, vertV - r),
-                          coeff(vertU - r, vertV), coeff(vertU, vertV), coeff(vertU + r, vertV),
-                          coeff(vertU - r, vertV + r), coeff(vertU, vertV + r), coeff(vertU + r, vertV + r));
+  vec3 U = vec3(u*u, u, 1);
+  vec3 V = vec3(v*v, v, 1);
 
-  // vec3 U = vec3(u*u, u, 1);
-  // vec3 V = vec3(v*v, v, 1);
+  vec3 dU = vec3(2*u, 1, 0);
+  vec3 dV = vec3(2*v, 1, 0);
 
-  // vec3 dU = vec3(2*u, 1, 0);
-  // vec3 dV = vec3(2*v, 1, 0);
+  // vec3 U = vec3(0.5*0.5, 0.5, 1);
+  // vec3 V = vec3(0.5*0.5, 0.5, 1);
 
-  vec3 U = vec3(0.5*0.5, 0.5, 1);
-  vec3 V = vec3(0.5*0.5, 0.5, 1);
-
-  vec3 dU = vec3(2*0.5, 1, 0);
-  vec3 dV = vec3(2*0.5, 1, 0);
+  // vec3 dU = vec3(2*0.5, 1, 0);
+  // vec3 dV = vec3(2*0.5, 1, 0);
 
 
   float dDdu = tileSize * dot(biquadraticMt * dU, coefficients * biquadraticMt * V);
@@ -135,9 +141,11 @@ void main() {
   // vec3 normalColor = 0.5 * normalize(vertnormal_fs) + vec3(0.5, 0.5, 0.5);
   // fColor = vec4(normalColor, 1.0);
   vec3 matcolour = vec3(0.53, 0.80, 0.87);
-  vec3 col = phongShading(matcolour, vertcoords_fs, vertnormal_fs);
+  // vec3 col = phongShading(matcolour, vertcoords_fs, vertnormal_fs);
 
-  // vec3 col = phongShading(matcolour, vertcoords_fs, normalF);
+  // vec3 col = vec3(0.2 * dDdu, 0.2 * dDdv, 0);
+  vec3 col = phongShading(matcolour, vertcoords_fs, normalF);
+
   fColor = vec4(col, 1.0);
   // Quite hacky trick, but this makes sure that if the control mesh and the
   // tessellated mesh are very close to each other, the tessellated mesh is
