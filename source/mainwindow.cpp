@@ -149,7 +149,7 @@ void MainWindow::on_levelOfDetailCheckBox_clicked(bool checked)
 
 
 void MainWindow::on_detailSlider_valueChanged(int value) {
-  ui->MainDisplay->settings.tessDetail = static_cast<float>(value) / 10;
+  ui->MainDisplay->settings.tessDetail = static_cast<float>(value);
   ui->MainDisplay->settings.uniformUpdateRequired = true;
   ui->MainDisplay->update();
 }

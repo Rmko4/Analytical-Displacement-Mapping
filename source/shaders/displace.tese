@@ -2,7 +2,7 @@
 
 #define M_PI 3.1415926538
 
-layout(quads, equal_spacing, ccw) in;
+layout(quads, fractional_odd_spacing, ccw) in;
 
 layout(location = 0) in vec3[] vertcoords_tc;
 layout(location = 1) in vec3[] vertnormals_tc;
