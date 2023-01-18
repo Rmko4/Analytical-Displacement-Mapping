@@ -30,6 +30,7 @@ uniform float tess_amplitude;
 uniform int displacement_mode;
 
 const float freq = .5F;
+const vec3 matcolour = vec3(0.53, 0.80, 0.87);
 
 // Defined in shading.glsl
 vec3 phongShading(vec3 matCol, vec3 coords, vec3 normal);
@@ -111,13 +112,9 @@ void main() {
   vec3 dNsdu = vertbasenormaldu;
   vec3 dNsdv = vertbasenormaldv;
 
-
   float r = 1 / tileSize;
 
 // Yields the center coordinates [0,1], such that it is on k*r for any positive integer k.
-  // float uC = vertU;
-  // float vC = vertV;
-  
   float uC = vertU + r * (0.5 - u); 
   float vC = vertV + r * (0.5 - v);  
   
@@ -131,38 +128,50 @@ void main() {
   vec3 dU = vec3(2*u, 1, 0);
   vec3 dV = vec3(2*v, 1, 0);
 
-  // vec3 U = vec3(0.5*0.5, 0.5, 1);
-  // vec3 V = vec3(0.5*0.5, 0.5, 1);
-
-  // vec3 dU = vec3(2*0.5, 1, 0);
-  // vec3 dV = vec3(2*0.5, 1, 0);
-
 
   float dDdu = tileSize * dot(biquadraticMt * dU, coefficients * biquadraticMt * V);
   float dDdv = tileSize * dot(biquadraticMt * U, coefficients * biquadraticMt * dV);
 
-  // Approximate shading
+  // Interpolated approximate normals shading
+  // vec3 col = phongShading(matcolour, vertcoords_fs, vertnormal_fs);
+  
+  // Approximate normals shading
+  vec3 dfduApprox = dsdu + Ns * dDdu;
+  vec3 dfdvvApprox = dsdv + Ns * dDdv;
+
+  vec3 normalFApprox = normalize(cross(dfduApprox, dfdvvApprox));
+  normalFApprox = normalize(normalmatrix * normalFApprox);
+
+  // vec3 col = phongShading(matcolour, vertcoords_fs, normalFApprox);
+
+
+  // True normals shading
   vec3 dfdu = dsdu + Ns * dDdu + dNsdu * D;
   vec3 dfdv = dsdv + Ns * dDdv + dNsdv * D;
 
   vec3 normalF = normalize(cross(dfdu, dfdv));
   normalF = normalize(normalmatrix * normalF);
 
-  vec3 normalS = normalize(normalmatrix * Ns);
+  vec3 col = phongShading(matcolour, vertcoords_fs, normalF);
 
+
+
+
+
+  // vec3 normalS = normalize(normalmatrix * Ns);
   // vec3 normalColor = 0.5 * normalize(vertnormal_fs) + vec3(0.5, 0.5, 0.5);
   // fColor = vec4(normalColor, 1.0);
-  vec3 matcolour = vec3(0.53, 0.80, 0.87);
-  vec3 col = phongShading(matcolour, vertcoords_fs, vertnormal_fs);
-
   // vec3 col = vec3(0.2 * dDdu, 0.2 * dDdv, 0);
+  // vec3 col = vec3(vertU, vertV, 0);
   // vec3 col = vec3(dNsdu[0], dNsdu[1], dNsdu[2]);
-  // vec3 col = phongShading(matcolour, vertcoords_fs, normalF);
 
   // vec4 posC = projectionmatrix * modelviewmatrix * vec4(vertcoords_fs, 1.0);
   // float z = posC.z;
   // z /= posC.w;
   // vec3 col = vec3((1.0 - z)/2, posC.w/10, posC.z);
+
+
+
 
   fColor = vec4(col, 1.0);
   // Quite hacky trick, but this makes sure that if the control mesh and the

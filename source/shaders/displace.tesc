@@ -30,18 +30,19 @@ void main() {
   if (gl_InvocationID == 0) {
     if (dynamicLoD) {
       /* default (u,v) layout of quad
-      * (0,1) (1,1) -> 6 10 -> A D
-      * (0,0) (1,0) -> 5 9  -> B C
+      * (0,1) (1,1) -> 9 10 -> D A 
+      * (0,0) (1,0) -> 5 6  -> C B 
       */
 
-      float tessFactorA = computeVertexTF(6, 2, 5, 10, 7);
-      float tessFactorB = computeVertexTF(5, 1, 4, 9, 6);
-      float tessFactorC = computeVertexTF(9, 5, 8, 13, 10);
-      float tessFactorD = computeVertexTF(10, 6, 9, 14, 11);
-      gl_TessLevelOuter[0] = max(tessFactorA, tessFactorB);
-      gl_TessLevelOuter[1] = max(tessFactorB, tessFactorC);
-      gl_TessLevelOuter[2] = max(tessFactorC, tessFactorD);
-      gl_TessLevelOuter[3] = max(tessFactorD, tessFactorA);
+      float tessFactorA = computeVertexTF(10, 6, 9, 14, 11);
+      float tessFactorB = computeVertexTF(6, 2, 5, 10, 7);
+      float tessFactorC = computeVertexTF(5, 1, 4, 9, 6);
+      float tessFactorD = computeVertexTF(9, 5, 8, 13, 10);
+
+      gl_TessLevelOuter[0] = max(tessFactorD, tessFactorC);
+      gl_TessLevelOuter[1] = max(tessFactorC, tessFactorB);
+      gl_TessLevelOuter[2] = max(tessFactorB, tessFactorA);
+      gl_TessLevelOuter[3] = max(tessFactorA, tessFactorD);
 
       // gl_TessLevelOuter[0] = max(tessFactor[6], tessFactor[5]);
       // gl_TessLevelOuter[1] = max(tessFactor[5], tessFactor[9]);
