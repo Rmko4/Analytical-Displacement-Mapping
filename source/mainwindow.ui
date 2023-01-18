@@ -274,7 +274,7 @@ QGroupBox::title {
              <number>64</number>
             </property>
             <property name="value">
-             <number>1</number>
+             <number>4</number>
             </property>
            </widget>
           </item>
@@ -359,7 +359,7 @@ QGroupBox::title {
          <x>10</x>
          <y>560</y>
          <width>201</width>
-         <height>181</height>
+         <height>191</height>
         </rect>
        </property>
        <property name="title">
@@ -371,7 +371,7 @@ QGroupBox::title {
           <x>10</x>
           <y>20</y>
           <width>191</width>
-          <height>173</height>
+          <height>161</height>
          </rect>
         </property>
         <layout class="QVBoxLayout" name="verticalLayout_4">

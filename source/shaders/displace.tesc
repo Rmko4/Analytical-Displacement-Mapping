@@ -48,8 +48,6 @@ void main() {
       // gl_TessLevelOuter[2] = max(tessFactor[9], tessFactor[10]);
       // gl_TessLevelOuter[3] = max(tessFactor[10], tessFactor[6]);
 
-
-
       gl_TessLevelInner[0] = max(gl_TessLevelOuter[1], gl_TessLevelOuter[3]);
       gl_TessLevelInner[1] = max(gl_TessLevelOuter[0], gl_TessLevelOuter[2]);
     } else {

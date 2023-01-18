@@ -2,7 +2,7 @@
 
 #define M_PI 3.1415926538
 
-layout(quads, fractional_odd_spacing, ccw) in;
+layout(quads, fractional_even_spacing, ccw) in;
 
 layout(location = 0) in vec3[] vertcoords_tc;
 layout(location = 1) in vec3[] vertnormals_tc;
@@ -45,9 +45,9 @@ const mat3 biquadraticMt = mat3(1, -2,  1,
                                 -2,  2,  0,
                                  1,  1,  0) / 2;
 
-const mat3 biquadraticM = mat3(1, -2,  1,
-                                -2,  2,  1,
-                                 1,  0,  0) / 2;
+float subpatchTransform(float t) {
+  return fract(innerTessLevel * t - 0.5);
+}
 
 float coeff(float u, float v) {
   // Forcing turnable symetry around 0.5, 0.5
@@ -142,19 +142,19 @@ vec3 baseSurfaceNormal(float u, float v, mat4 Gx, mat4 Gy, mat4 Gz) {
   return normalS;
 }
 
-float offset(float u, float v) {
+float offset(float u, float v, float uC, float vC) {
   // For now consider uniform tessellation levels.
-  vec3 U = vec3(0.5*0.5, 0.5, 1);
-  vec3 V = vec3(0.5*0.5, 0.5, 1);
+  vec3 U = vec3(u*u, u, 1);
+  vec3 V = vec3(v*v, v, 1);
 
   // vec3 U = vec3(u*u, u, 1);
   // vec3 V = vec3(v*v, v, 1);
 
   float r = 1 / innerTessLevel;
 
-  mat3 coefficients = mat3(coeff(u - r, v - r), coeff(u, v - r), coeff(u + r, v - r),
-                           coeff(u - r, v), coeff(u, v), coeff(u + r, v),
-                           coeff(u - r, v + r), coeff(u, v + r), coeff(u + r, v + r));
+  mat3 coefficients = mat3(coeff(uC - r, vC - r), coeff(uC, vC - r), coeff(uC + r, vC - r),
+                          coeff(uC - r, vC), coeff(uC, vC), coeff(uC + r, vC),
+                          coeff(uC - r, vC + r), coeff(uC, vC + r), coeff(uC + r, vC + r));
 
   float D = dot(biquadraticMt * U, coefficients * biquadraticMt * V);
   return D;
@@ -165,12 +165,13 @@ void main() {
   float u = gl_TessCoord.x;
   float v = gl_TessCoord.y;
 
-  /* Vertices layout (should be transposed, or use cw setting)
-  * 12 13 14 15 -> 0  4  8  12
-  * 8  9  10 11 -> 1  5  9  13
-  * 4  5  6  7  -> 2  6  10 14
-  * 0  1  2  3  -> 3  7  11 15
-  */
+  float uhat = subpatchTransform(u); // Maps to [0,1]
+  float vhat = subpatchTransform(v);
+
+  float r = 1 / innerTessLevel;
+
+  float uC = u + r * (0.5 - uhat); 
+  float vC = v + r * (0.5 - vhat);  
 
   // Use three control point matrices, one for each spatial dimension.
   mat4 Gx = mat4(vertcoords_tc[0].x, vertcoords_tc[1].x, vertcoords_tc[2].x, vertcoords_tc[3].x,
@@ -191,25 +192,20 @@ void main() {
 
   vec3 s = baseSurfacePosition(u, v, Gx, Gy, Gz);
   vec3 Ns = baseSurfaceNormal(u, v, Gx, Gy, Gz);
-  float D = offset(u, v);
-  // float r = 1 / innerTessLevel;
+  float D = offset(uhat, vhat, uC, vC);
   // float D = coeff(u, v);
 
   vec3 f = s + Ns * D;
 
-  vec3 U = vec3(0.5*0.5, 0.5, 1);
-  vec3 V = vec3(0.5*0.5, 0.5, 1);
+  vec3 U = vec3(uhat*uhat, uhat, 1);
+  vec3 V = vec3(vhat*vhat, vhat, 1);
 
-  vec3 dU = vec3(2*0.5, 1, 0);
-  vec3 dV = vec3(2*0.5, 1, 0);
+  vec3 dU = vec3(2*uhat, 1, 0);
+  vec3 dV = vec3(2*vhat, 1, 0);
 
-
-
-  float r = 1 / innerTessLevel;
-
-  mat3 coefficients = mat3(coeff(u - r, v - r), coeff(u, v - r), coeff(u + r, v - r),
-                           coeff(u - r, v), coeff(u, v), coeff(u + r, v),
-                           coeff(u - r, v + r), coeff(u, v + r), coeff(u + r, v + r));
+  mat3 coefficients = mat3(coeff(uC - r, vC - r), coeff(uC, vC - r), coeff(uC + r, vC - r),
+                          coeff(uC - r, vC), coeff(uC, vC), coeff(uC + r, vC),
+                          coeff(uC - r, vC + r), coeff(uC, vC + r), coeff(uC + r, vC + r));
 
   float dDdu = innerTessLevel * dot(biquadraticMt * dU, coefficients * biquadraticMt * V);
   float dDdv = innerTessLevel * dot(biquadraticMt * U, coefficients * biquadraticMt * dV);
