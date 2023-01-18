@@ -165,11 +165,13 @@ void main() {
   float u = gl_TessCoord.x;
   float v = gl_TessCoord.y;
 
+  // These are the coordinates of the 3x3 subpatch for displacement
   float uhat = subpatchTransform(u); // Maps to [0,1]
   float vhat = subpatchTransform(v);
 
   float r = 1 / innerTessLevel;
 
+  // These are the center coordinates of the 3x3 subpatch in the main (u,v) domain.
   float uC = u + r * (0.5 - uhat); 
   float vC = v + r * (0.5 - vhat);  
 
