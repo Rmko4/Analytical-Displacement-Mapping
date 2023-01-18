@@ -159,8 +159,7 @@ void main() {
 
 
   // vec3 normalS = normalize(normalmatrix * Ns);
-  // vec3 normalColor = 0.5 * normalize(vertnormal_fs) + vec3(0.5, 0.5, 0.5);
-  // fColor = vec4(normalColor, 1.0);
+
   // vec3 col = vec3(0.2 * dDdu, 0.2 * dDdv, 0);
   // vec3 col = vec3(vertU, vertV, 0);
   // vec3 col = vec3(dNsdu[0], dNsdu[1], dNsdu[2]);
@@ -171,9 +170,15 @@ void main() {
   // vec3 col = vec3((1.0 - z)/2, posC.w/10, posC.z);
 
 
+  // Use any of the three normals
+  vec3 normalColor = 0.5 * normalize(normalF) + vec3(0.5, 0.5, 0.5);
+  // Normal shading
+  fColor = vec4(normalColor, 1.0);
+  // Phong shading
+  // fColor = vec4(col, 1.0);
 
 
-  fColor = vec4(col, 1.0);
+
   // Quite hacky trick, but this makes sure that if the control mesh and the
   // tessellated mesh are very close to each other, the tessellated mesh is
   // rendered on top. This prevents flickering.
