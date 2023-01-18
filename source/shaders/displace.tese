@@ -166,10 +166,10 @@ void main() {
   float v = gl_TessCoord.y;
 
   /* Vertices layout (should be transposed, or use cw setting)
-  * 15 14 8  11 -> 12 13 14 15
-  * 12 13 9  10 -> 8  9  10 11
-  * 2  1  5  4  -> 4  5  6  7
-  * 3  0  6  7  -> 0  1  2  3
+  * 12 13 14 15 -> 0  4  8  12
+  * 8  9  10 11 -> 1  5  9  13
+  * 4  5  6  7  -> 2  6  10 14
+  * 0  1  2  3  -> 3  7  11 15
   */
 
   // Use three control point matrices, one for each spatial dimension.

@@ -19,9 +19,10 @@ in float vertdisplacement;
 in vec3 vertbasenormaldu;
 in vec3 vertbasenormaldv;
 
-
 out vec4 fColor;
 
+// uniform mat4 modelviewmatrix;
+// uniform mat4 projectionmatrix;
 
 uniform mat3 normalmatrix;
 
@@ -156,7 +157,12 @@ void main() {
 
   // vec3 col = vec3(0.2 * dDdu, 0.2 * dDdv, 0);
   // vec3 col = vec3(dNsdu[0], dNsdu[1], dNsdu[2]);
-  vec3 col = phongShading(matcolour, vertcoords_fs, normalF);
+  // vec3 col = phongShading(matcolour, vertcoords_fs, normalF);
+
+  // vec4 posC = projectionmatrix * modelviewmatrix * vec4(vertcoords_fs, 1.0);
+  // float z = posC.z;
+  // z /= posC.w;
+  // vec3 col = vec3((1.0 - z)/2, posC.w/10, posC.z);
 
   fColor = vec4(col, 1.0);
   // Quite hacky trick, but this makes sure that if the control mesh and the
