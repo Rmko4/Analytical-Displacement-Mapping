@@ -32,6 +32,11 @@ typedef struct Settings {
   float amplitude = 0.2;
   int displacement_mode = 0;
 
+  // Shading mode:
+  int shading_mode = 0; // 0 is phong. 1 is normals
+
+  int normal_mode = 0; // 0 is true normals; 1 is approx normals; 2 is interpolated normals
+
   bool uniformUpdateRequired = true;
 
   ShaderType currentMeshShader = ShaderType::PHONG;

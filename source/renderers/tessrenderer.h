@@ -35,6 +35,7 @@ class TessellationRenderer : public Renderer {
   GLint uniInnerTessLevel, uniOuterTessLevel;
   GLint uniDynamicLoD, uniTessDetail;
   GLint uniAmplitude, uniDisplacementMode;
+  GLint shading_mode, normal_mode;
 };
 
 #endif  // TessRenderer_H

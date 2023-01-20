@@ -29,6 +29,9 @@ uniform mat3 normalmatrix;
 uniform float tess_amplitude;
 uniform int displacement_mode;
 
+uniform int shading_mode;
+uniform int normal_mode;
+
 const float freq = .5F;
 const vec3 matcolour = vec3(0.53, 0.80, 0.87);
 
@@ -152,7 +155,20 @@ void main() {
   vec3 normalF = normalize(cross(dfdu, dfdv));
   normalF = normalize(normalmatrix * normalF);
 
-  vec3 col = phongShading(matcolour, vertcoords_fs, normalF);
+
+  // Not putting all the above calculations inside the if clause because glsl can't do
+  // real conditional branching anyway
+  vec3 finalNormal = normalF;
+  if (normal_mode == 1) {
+      finalNormal = normalize(normalFApprox);
+  }
+  else if (normal_mode == 2) {
+      finalNormal = normalize(vertnormal_fs);
+  }
+
+
+
+  vec3 col = phongShading(matcolour, vertcoords_fs, finalNormal);
 
 
 
@@ -171,11 +187,19 @@ void main() {
 
 
   // Use any of the three normals
-  vec3 normalColor = 0.5 * normalize(normalF) + vec3(0.5, 0.5, 0.5);
-  // Normal shading
-  fColor = vec4(normalColor, 1.0);
-  // Phong shading
-  // fColor = vec4(col, 1.0);
+  vec3 normalColor = 0.5 * normalize(finalNormal) + vec3(0.5, 0.5, 0.5);
+
+
+  // Not putting all the above calculations inside the if clause because glsl can't do
+  // real conditional branching anyway
+  if (shading_mode == 0) {
+      // Phong shading:
+      fColor = vec4(col, 1.0);
+  }
+  else {
+      // Normal shading:
+      fColor = vec4(normalColor, 1.0);
+  }
 
 
 

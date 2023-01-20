@@ -16,7 +16,10 @@ MainWindow::MainWindow(QWidget *parent)
   ui->MeshGroupBox->setEnabled(ui->MainDisplay->settings.modelLoaded);
   ui->tessSettingsGroupBox->setEnabled(
       ui->MainDisplay->settings.tesselationMode);
-  ui->MeshRenderGroupBox->setEnabled(ui->MainDisplay->settings.modelLoaded);
+  ui->shadinggroupBox->setEnabled(ui->MainDisplay->settings.tesselationMode
+                                  && ui->MainDisplay->settings.currentTessellationShader == ShaderType::DISPLACEMENT);
+  ui->displacementGroupBox->setEnabled(ui->MainDisplay->settings.tesselationMode
+                                       && ui->MainDisplay->settings.currentTessellationShader == ShaderType::DISPLACEMENT);
 }
 
 /**
@@ -50,7 +53,11 @@ void MainWindow::importOBJ(const QString &fileName) {
   }
 
   ui->MeshGroupBox->setEnabled(ui->MainDisplay->settings.modelLoaded);
-  ui->MeshRenderGroupBox->setEnabled(ui->MainDisplay->settings.modelLoaded);
+  ui->shadinggroupBox->setEnabled(ui->MainDisplay->settings.tesselationMode
+                                  && ui->MainDisplay->settings.currentTessellationShader == ShaderType::DISPLACEMENT);
+  ui->displacementGroupBox->setEnabled(ui->MainDisplay->settings.tesselationMode
+                                       && ui->MainDisplay->settings.currentTessellationShader == ShaderType::DISPLACEMENT);
+
   ui->SubdivSteps->setValue(0);
   ui->MainDisplay->update();
 }
@@ -83,15 +90,20 @@ void MainWindow::on_TessellationCheckBox_toggled(bool checked) {
   if (!checked) {
     // Always display cpu mesh when disabling tessellation
     ui->MainDisplay->settings.showCpuMesh = true;
-    ui->MeshRenderGroupBox->setEnabled(true);
   } else {
     // Upon enabling tessellation the previous settings should be restored
     // again.
     bool showMesh = !ui->HideMeshCheckBox->isChecked();
     ui->MainDisplay->settings.showCpuMesh = showMesh;
-    ui->MeshRenderGroupBox->setEnabled(showMesh);
+//    ui->MeshRenderGroupBox->setEnabled(showMesh);
   }
   ui->MainDisplay->settings.uniformUpdateRequired = true;
+
+  ui->shadinggroupBox->setEnabled(ui->MainDisplay->settings.tesselationMode
+                                  && ui->MainDisplay->settings.currentTessellationShader == ShaderType::DISPLACEMENT);
+  ui->displacementGroupBox->setEnabled(ui->MainDisplay->settings.tesselationMode
+                                       && ui->MainDisplay->settings.currentTessellationShader == ShaderType::DISPLACEMENT);
+
   ui->MainDisplay->update();
 }
 
@@ -99,7 +111,7 @@ void MainWindow::on_HideMeshCheckBox_toggled(bool checked) {
   // Useful for clearly seeing only the patches rendered by the Tessellation
   // shaders.
   ui->MainDisplay->settings.showCpuMesh = !checked;
-  ui->MeshRenderGroupBox->setEnabled(!checked);
+//  ui->MeshRenderGroupBox->setEnabled(!checked);
   ui->MainDisplay->settings.uniformUpdateRequired = true;
   ui->MainDisplay->update();
 }
@@ -116,18 +128,36 @@ void MainWindow::on_LimitProjectionButton_pressed() {
 
 void MainWindow::on_bilinearButton_clicked() {
   ui->MainDisplay->settings.currentTessellationShader = ShaderType::BILINEAR;
+
+  ui->shadinggroupBox->setEnabled(ui->MainDisplay->settings.tesselationMode
+                                  && ui->MainDisplay->settings.currentTessellationShader == ShaderType::DISPLACEMENT);
+  ui->displacementGroupBox->setEnabled(ui->MainDisplay->settings.tesselationMode
+                                       && ui->MainDisplay->settings.currentTessellationShader == ShaderType::DISPLACEMENT);
+
   ui->MainDisplay->settings.uniformUpdateRequired = true;
   ui->MainDisplay->updateBuffers(*currentMesh);
 }
 
 void MainWindow::on_bicubicButton_clicked() {
   ui->MainDisplay->settings.currentTessellationShader = ShaderType::BICUBIC;
+
+  ui->shadinggroupBox->setEnabled(ui->MainDisplay->settings.tesselationMode
+                                  && ui->MainDisplay->settings.currentTessellationShader == ShaderType::DISPLACEMENT);
+  ui->displacementGroupBox->setEnabled(ui->MainDisplay->settings.tesselationMode
+                                       && ui->MainDisplay->settings.currentTessellationShader == ShaderType::DISPLACEMENT);
+
   ui->MainDisplay->settings.uniformUpdateRequired = true;
   ui->MainDisplay->updateBuffers(*currentMesh);
 }
 
 void MainWindow::on_displacementButton_clicked() {
   ui->MainDisplay->settings.currentTessellationShader = ShaderType::DISPLACEMENT;
+
+  ui->shadinggroupBox->setEnabled(ui->MainDisplay->settings.tesselationMode
+                                  && ui->MainDisplay->settings.currentTessellationShader == ShaderType::DISPLACEMENT);
+  ui->displacementGroupBox->setEnabled(ui->MainDisplay->settings.tesselationMode
+                                       && ui->MainDisplay->settings.currentTessellationShader == ShaderType::DISPLACEMENT);
+
   ui->MainDisplay->settings.uniformUpdateRequired = true;
   ui->MainDisplay->updateBuffers(*currentMesh);
 }
@@ -162,7 +192,7 @@ void MainWindow::on_amplitudeSlider_valueChanged(int value)
   ui->MainDisplay->update();
 }
 
-
+// Bubblewrap displacement:
 void MainWindow::on_radioButton_clicked()
 {
   ui->MainDisplay->settings.displacement_mode = 0;
@@ -170,7 +200,7 @@ void MainWindow::on_radioButton_clicked()
   ui->MainDisplay->update();
 }
 
-
+// Pinhead displacement:
 void MainWindow::on_radioButton_2_clicked()
 {
   ui->MainDisplay->settings.displacement_mode = 1;
@@ -178,7 +208,7 @@ void MainWindow::on_radioButton_2_clicked()
   ui->MainDisplay->update();
 }
 
-
+// Chocolate bar displacement:
 void MainWindow::on_radioButton_3_clicked()
 {
   ui->MainDisplay->settings.displacement_mode = 2;
@@ -186,11 +216,53 @@ void MainWindow::on_radioButton_3_clicked()
   ui->MainDisplay->update();
 }
 
-
+// Random displacement:
 void MainWindow::on_radioButton_4_clicked()
 {
   ui->MainDisplay->settings.displacement_mode = 3;
   ui->MainDisplay->settings.uniformUpdateRequired = true;
   ui->MainDisplay->update();
+}
+
+// Using phong shading on the displacement mesh:
+void MainWindow::on_phong_shad_clicked()
+{
+    ui->MainDisplay->settings.shading_mode = 0;
+    ui->MainDisplay->settings.uniformUpdateRequired = true;
+    ui->MainDisplay->update();
+}
+
+// Visualizing normals on the displacment mesh:
+void MainWindow::on_norm_shad_clicked()
+{
+    ui->MainDisplay->settings.shading_mode = 1;
+    ui->MainDisplay->settings.uniformUpdateRequired = true;
+    ui->MainDisplay->update();
+}
+
+// Using true normals that include that were calculated by uncluded the Weingarten term in
+// the partial derivatives of the analytical surface function w.r.t. u and v:
+void MainWindow::on_true_norms_clicked()
+{
+    ui->MainDisplay->settings.normal_mode = 0;
+    ui->MainDisplay->settings.uniformUpdateRequired = true;
+    ui->MainDisplay->update();
+}
+
+// Using an approximation that skips the Weingarten term (see on_true_norms_clicked comment)
+void MainWindow::on_approx_norms_clicked()
+{
+    ui->MainDisplay->settings.normal_mode = 1;
+    ui->MainDisplay->settings.uniformUpdateRequired = true;
+    ui->MainDisplay->update();
+}
+
+// Using approximation and doing this in the tese shader such that in the fragment shader
+// we just use interpolated values for the normals
+void MainWindow::on_interpolated_norms_clicked()
+{
+    ui->MainDisplay->settings.normal_mode = 2;
+    ui->MainDisplay->settings.uniformUpdateRequired = true;
+    ui->MainDisplay->update();
 }
 

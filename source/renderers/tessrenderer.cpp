@@ -131,6 +131,9 @@ void TessellationRenderer::updateUniforms() {
   uniAmplitude = shader->uniformLocation("tess_amplitude");
   uniDisplacementMode = shader->uniformLocation("displacement_mode");
 
+  shading_mode = shader->uniformLocation("shading_mode");
+  normal_mode = shader->uniformLocation("normal_mode");
+
   gl->glUniformMatrix4fv(uniModelViewMatrix, 1, false,
                          settings->modelViewMatrix.data());
   gl->glUniformMatrix4fv(uniProjectionMatrix, 1, false,
@@ -145,6 +148,9 @@ void TessellationRenderer::updateUniforms() {
 
   gl->glUniform1f(uniAmplitude, settings->amplitude);
   gl->glUniform1i(uniDisplacementMode, settings->displacement_mode);
+
+  gl->glUniform1i(shading_mode, settings->shading_mode);
+  gl->glUniform1i(normal_mode, settings->normal_mode);
 
 }
 

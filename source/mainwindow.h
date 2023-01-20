@@ -52,6 +52,16 @@ private slots:
 
   void on_levelOfDetailCheckBox_clicked(bool checked);
 
+  void on_phong_shad_clicked();
+
+  void on_norm_shad_clicked();
+
+  void on_true_norms_clicked();
+
+  void on_approx_norms_clicked();
+
+  void on_interpolated_norms_clicked();
+
 private:
   void importOBJ(const QString &fileName);
 

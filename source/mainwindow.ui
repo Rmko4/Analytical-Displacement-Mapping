@@ -65,7 +65,7 @@ QGroupBox::title {
          <x>20</x>
          <y>30</y>
          <width>181</width>
-         <height>41</height>
+         <height>21</height>
         </rect>
        </property>
        <property name="text">
@@ -79,22 +79,15 @@ QGroupBox::title {
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>110</y>
+         <y>80</y>
          <width>201</width>
-         <height>101</height>
+         <height>81</height>
         </rect>
        </property>
+       <property name="title">
+        <string>Subdivision</string>
+       </property>
        <layout class="QVBoxLayout" name="verticalLayout">
-        <item>
-         <widget class="QLabel" name="subdivTitleLabel">
-          <property name="text">
-           <string>Subdivision</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignCenter</set>
-          </property>
-         </widget>
-        </item>
         <item>
          <layout class="QHBoxLayout" name="stepsLayout">
           <item>
@@ -129,9 +122,9 @@ QGroupBox::title {
        <property name="geometry">
         <rect>
          <x>20</x>
-         <y>80</y>
+         <y>60</y>
          <width>181</width>
-         <height>31</height>
+         <height>21</height>
         </rect>
        </property>
        <item>
@@ -204,9 +197,9 @@ QGroupBox::title {
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>210</y>
+         <y>160</y>
          <width>201</width>
-         <height>221</height>
+         <height>201</height>
         </rect>
        </property>
        <property name="title">
@@ -229,16 +222,6 @@ QGroupBox::title {
          <widget class="QCheckBox" name="HideMeshCheckBox">
           <property name="text">
            <string>Hide CPU Mesh</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QRadioButton" name="bilinearButton">
-          <property name="text">
-           <string>Bilinear</string>
-          </property>
-          <property name="checked">
-           <bool>true</bool>
           </property>
          </widget>
         </item>
@@ -309,55 +292,11 @@ QGroupBox::title {
         </item>
        </layout>
       </widget>
-      <widget class="QGroupBox" name="MeshRenderGroupBox">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>480</y>
-         <width>201</width>
-         <height>71</height>
-        </rect>
-       </property>
-       <property name="title">
-        <string>CPU Mesh render settings</string>
-       </property>
-       <layout class="QVBoxLayout" name="verticalLayout_3">
-        <property name="leftMargin">
-         <number>6</number>
-        </property>
-        <property name="topMargin">
-         <number>6</number>
-        </property>
-        <property name="rightMargin">
-         <number>6</number>
-        </property>
-        <property name="bottomMargin">
-         <number>6</number>
-        </property>
-        <item>
-         <widget class="QRadioButton" name="OriginalProjectionButton">
-          <property name="text">
-           <string>Original</string>
-          </property>
-          <property name="checked">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QRadioButton" name="LimitProjectionButton">
-          <property name="text">
-           <string>Limit Projection</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
       <widget class="QGroupBox" name="displacementGroupBox">
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>560</y>
+         <y>550</y>
          <width>201</width>
          <height>191</height>
         </rect>
@@ -439,6 +378,102 @@ QGroupBox::title {
         </layout>
        </widget>
       </widget>
+      <widget class="QGroupBox" name="shadinggroupBox">
+       <property name="geometry">
+        <rect>
+         <x>9</x>
+         <y>360</y>
+         <width>201</width>
+         <height>191</height>
+        </rect>
+       </property>
+       <property name="title">
+        <string>Shading</string>
+       </property>
+       <widget class="QWidget" name="verticalLayoutWidget_2">
+        <property name="geometry">
+         <rect>
+          <x>9</x>
+          <y>19</y>
+          <width>191</width>
+          <height>166</height>
+         </rect>
+        </property>
+        <layout class="QVBoxLayout" name="shadingverticalLayout">
+         <item>
+          <widget class="QLabel" name="label">
+           <property name="text">
+            <string>Normals:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QRadioButton" name="true_norms">
+           <property name="text">
+            <string>True normals</string>
+           </property>
+           <property name="checked">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QRadioButton" name="approx_norms">
+           <property name="text">
+            <string>Approximate</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QRadioButton" name="interpolated_norms">
+           <property name="text">
+            <string>Interpolated</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_2">
+           <property name="text">
+            <string>Shading:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_2">
+           <property name="spacing">
+            <number>0</number>
+           </property>
+           <property name="rightMargin">
+            <number>0</number>
+           </property>
+           <item>
+            <widget class="QRadioButton" name="phong_shad">
+             <property name="text">
+              <string>Phong</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+             <attribute name="buttonGroup">
+              <string notr="true">buttonGroup</string>
+             </attribute>
+            </widget>
+           </item>
+           <item>
+            <widget class="QRadioButton" name="norm_shad">
+             <property name="text">
+              <string>Normals</string>
+             </property>
+             <attribute name="buttonGroup">
+              <string notr="true">buttonGroup</string>
+             </attribute>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </widget>
+      </widget>
      </widget>
     </item>
     <item>
@@ -461,4 +496,7 @@ QGroupBox::title {
  </customwidgets>
  <resources/>
  <connections/>
+ <buttongroups>
+  <buttongroup name="buttonGroup"/>
+ </buttongroups>
 </ui>
