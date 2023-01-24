@@ -18,12 +18,16 @@ uniform float tessDetail;
 uniform float innerTessLevel;
 uniform float outerTessLevel;
 
+float distance(int x, int y) {
+  return length(vertndc_vs[x] - vertndc_vs[y]);
+}
+
 float computeVertexTF(int center, int left, int bottom, int right, int top) {
-  float maxLength = length(vertndc_vs[center] - vertndc_vs[left]);
-  maxLength = max(maxLength, length(vertndc_vs[center] - vertndc_vs[bottom]));
-  maxLength = max(maxLength, length(vertndc_vs[center] - vertndc_vs[right]));
-  maxLength = max(maxLength, length(vertndc_vs[center] - vertndc_vs[top]));
-  return max(1.F, min(64.F, tessDetail * maxLength));
+  float maxLength = distance(center, left);
+  maxLength = max(maxLength, distance(center, bottom));
+  maxLength = max(maxLength, distance(center, right));
+  maxLength = max(maxLength, distance(center, top));
+  return clamp(tessDetail * maxLength, 1.F, 64.F);
 }
 
 void main() {
@@ -49,8 +53,11 @@ void main() {
       // gl_TessLevelOuter[2] = max(tessFactor[9], tessFactor[10]);
       // gl_TessLevelOuter[3] = max(tessFactor[10], tessFactor[6]);
 
-      gl_TessLevelInner[0] = max(gl_TessLevelOuter[1], gl_TessLevelOuter[3]);
-      gl_TessLevelInner[1] = max(gl_TessLevelOuter[0], gl_TessLevelOuter[2]);
+      // gl_TessLevelInner[0] = max(gl_TessLevelOuter[1], gl_TessLevelOuter[3]);
+      // gl_TessLevelInner[1] = max(gl_TessLevelOuter[0], gl_TessLevelOuter[2]);
+
+      gl_TessLevelInner[0] = clamp(tessDetail * max(distance(5, 6), distance(9, 10)), 1.F, 64.F);
+      gl_TessLevelInner[1] = clamp(tessDetail * max(distance(5, 9), distance(6, 10)), 1.F, 64.F);
     } else {
       gl_TessLevelOuter[0] = outerTessLevel;
       gl_TessLevelOuter[1] = outerTessLevel;
