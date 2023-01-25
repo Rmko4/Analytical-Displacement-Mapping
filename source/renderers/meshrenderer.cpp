@@ -84,12 +84,16 @@ void MeshRenderer::updateUniforms() {
   uniProjectionMatrix = shader->uniformLocation("projectionmatrix");
   uniNormalMatrix = shader->uniformLocation("normalmatrix");
 
+  uniShadingMode = shader->uniformLocation("shading_mode");
+
   gl->glUniformMatrix4fv(uniModelViewMatrix, 1, false,
                          settings->modelViewMatrix.data());
   gl->glUniformMatrix4fv(uniProjectionMatrix, 1, false,
                          settings->projectionMatrix.data());
   gl->glUniformMatrix3fv(uniNormalMatrix, 1, false,
                          settings->normalMatrix.data());
+
+  gl->glUniform1i(uniShadingMode, settings->shading_mode);
 }
 
 /**

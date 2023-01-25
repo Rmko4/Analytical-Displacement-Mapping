@@ -35,10 +35,10 @@ private slots:
   void on_displacementButton_clicked();
   void on_amplitudeSlider_valueChanged(int value);
 
-  void on_radioButton_clicked();
-  void on_radioButton_2_clicked();
-  void on_radioButton_3_clicked();
-  void on_radioButton_4_clicked();
+  void on_dispMode1Button_clicked();
+  void on_dispMode2Button_clicked();
+  void on_dispMode3Button_clicked();
+  void on_dispMode4Button_clicked();
 
   void on_detailSlider_valueChanged(int value);
   void on_levelOfDetailCheckBox_clicked(bool checked);
@@ -49,8 +49,6 @@ private slots:
   void on_true_norms_clicked();
   void on_approx_norms_clicked();
   void on_interpolated_norms_clicked();
-
-
 
 private:
   void importOBJ(const QString &fileName);

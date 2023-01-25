@@ -310,7 +310,7 @@ QGroupBox::title {
          <x>10</x>
          <y>550</y>
          <width>201</width>
-         <height>191</height>
+         <height>201</height>
         </rect>
        </property>
        <property name="title">
@@ -357,7 +357,7 @@ QGroupBox::title {
           </widget>
          </item>
          <item>
-          <widget class="QRadioButton" name="radioButton">
+          <widget class="QRadioButton" name="dispMode1Button">
            <property name="text">
             <string>Bubblewrap</string>
            </property>
@@ -367,21 +367,21 @@ QGroupBox::title {
           </widget>
          </item>
          <item>
-          <widget class="QRadioButton" name="radioButton_2">
+          <widget class="QRadioButton" name="dispMode2Button">
            <property name="text">
             <string>Pinhead</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QRadioButton" name="radioButton_3">
+          <widget class="QRadioButton" name="dispMode3Button">
            <property name="text">
             <string>Chocolate bar</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QRadioButton" name="radioButton_4">
+          <widget class="QRadioButton" name="dispMode4Button">
            <property name="text">
             <string>Random</string>
            </property>

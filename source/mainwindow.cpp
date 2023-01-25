@@ -170,7 +170,7 @@ void MainWindow::on_amplitudeSlider_valueChanged(int value)
 
 
 // Bubblewrap displacement:
-void MainWindow::on_radioButton_clicked()
+void MainWindow::on_dispMode1Button_clicked()
 {
   ui->MainDisplay->settings.displacement_mode = 0;
   ui->MainDisplay->settings.uniformUpdateRequired = true;
@@ -178,7 +178,7 @@ void MainWindow::on_radioButton_clicked()
 }
 
 // Pinhead displacement:
-void MainWindow::on_radioButton_2_clicked()
+void MainWindow::on_dispMode2Button_clicked()
 {
   ui->MainDisplay->settings.displacement_mode = 1;
   ui->MainDisplay->settings.uniformUpdateRequired = true;
@@ -186,7 +186,7 @@ void MainWindow::on_radioButton_2_clicked()
 }
 
 // Chocolate bar displacement:
-void MainWindow::on_radioButton_3_clicked()
+void MainWindow::on_dispMode3Button_clicked()
 {
   ui->MainDisplay->settings.displacement_mode = 2;
   ui->MainDisplay->settings.uniformUpdateRequired = true;
@@ -194,12 +194,13 @@ void MainWindow::on_radioButton_3_clicked()
 }
 
 // Random displacement:
-void MainWindow::on_radioButton_4_clicked()
+void MainWindow::on_dispMode4Button_clicked()
 {
   ui->MainDisplay->settings.displacement_mode = 3;
   ui->MainDisplay->settings.uniformUpdateRequired = true;
   ui->MainDisplay->update();
 }
+
 
 // Using phong shading on the displacement mesh:
 void MainWindow::on_phong_shad_clicked()

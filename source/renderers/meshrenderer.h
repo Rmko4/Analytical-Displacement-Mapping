@@ -30,6 +30,7 @@ class MeshRenderer : public Renderer {
 
   // Uniforms
   GLint uniModelViewMatrix, uniProjectionMatrix, uniNormalMatrix;
+  GLint uniShadingMode;
 };
 
 #endif  // MESHRENDERER_H
