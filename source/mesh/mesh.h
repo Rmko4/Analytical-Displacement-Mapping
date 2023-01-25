@@ -22,8 +22,6 @@ class Mesh {
 
   inline QVector<QVector3D>& getVertexCoords() { return vertexCoords; }
   inline QVector<QVector3D>& getVertexNorms() { return vertexNormals; }
-  inline QVector<QVector3D>& getLimitVertexCoords() { return limitVertexCoords; }
-  inline QVector<QVector3D>& getLimitVertexNormals() { return limitVertexNormals; }
 
   inline QVector<unsigned int>& getPolyIndices() { return polyIndices; }
   inline QVector<unsigned int>& getQuadIndices() { return quadIndices; }
@@ -32,7 +30,6 @@ class Mesh {
   void extractAttributes();
   void recalculateNormals();
   void computeRegularPatchIndices();
-  void computeLimitVertices();
 
   int numVerts();
   int numHalfEdges();
@@ -42,8 +39,6 @@ class Mesh {
  private:
   QVector<QVector3D> vertexCoords;
   QVector<QVector3D> vertexNormals;
-  QVector<QVector3D> limitVertexCoords;
-  QVector<QVector3D> limitVertexNormals;
 
   QVector<unsigned int> polyIndices;
   // for quad tessellation

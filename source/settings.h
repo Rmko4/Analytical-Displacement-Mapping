@@ -14,7 +14,6 @@ typedef struct Settings {
   bool wireframeMode = true;
   bool tesselationMode = false;
   bool showCpuMesh = true;
-  bool limitProjectionMode = false;
 
   int subdivSteps = 0;
 
@@ -34,13 +33,12 @@ typedef struct Settings {
 
   // Shading mode:
   int shading_mode = 0; // 0 is phong. 1 is normals
-
   int normal_mode = 0; // 0 is true normals; 1 is approx normals; 2 is interpolated normals
 
   bool uniformUpdateRequired = true;
 
   ShaderType currentMeshShader = ShaderType::PHONG;
-  ShaderType currentTessellationShader = ShaderType::BILINEAR;
+  ShaderType currentTessellationShader = ShaderType::BICUBIC;
 
   QMatrix4x4 modelViewMatrix, projectionMatrix;
   QMatrix3x3 normalMatrix;

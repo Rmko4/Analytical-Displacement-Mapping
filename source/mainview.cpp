@@ -105,9 +105,6 @@ void MainView::updateBuffers(Mesh &mesh) {
       settings.currentTessellationShader == ShaderType::DISPLACEMENT) {
     mesh.computeRegularPatchIndices();
   }
-  if (settings.limitProjectionMode) {
-    mesh.computeLimitVertices();
-  }
 
   meshRenderer.updateBuffers(mesh);
   tessellationRenderer.updateBuffers(mesh);

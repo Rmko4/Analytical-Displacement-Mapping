@@ -116,27 +116,6 @@ void MainWindow::on_HideMeshCheckBox_toggled(bool checked) {
   ui->MainDisplay->update();
 }
 
-void MainWindow::on_OriginalProjectionButton_pressed() {
-  ui->MainDisplay->settings.limitProjectionMode = false;
-  ui->MainDisplay->updateBuffers(*currentMesh);
-}
-
-void MainWindow::on_LimitProjectionButton_pressed() {
-  ui->MainDisplay->settings.limitProjectionMode = true;
-  ui->MainDisplay->updateBuffers(*currentMesh);
-}
-
-void MainWindow::on_bilinearButton_clicked() {
-  ui->MainDisplay->settings.currentTessellationShader = ShaderType::BILINEAR;
-
-  ui->shadinggroupBox->setEnabled(ui->MainDisplay->settings.tesselationMode
-                                  && ui->MainDisplay->settings.currentTessellationShader == ShaderType::DISPLACEMENT);
-  ui->displacementGroupBox->setEnabled(ui->MainDisplay->settings.tesselationMode
-                                       && ui->MainDisplay->settings.currentTessellationShader == ShaderType::DISPLACEMENT);
-
-  ui->MainDisplay->settings.uniformUpdateRequired = true;
-  ui->MainDisplay->updateBuffers(*currentMesh);
-}
 
 void MainWindow::on_bicubicButton_clicked() {
   ui->MainDisplay->settings.currentTessellationShader = ShaderType::BICUBIC;

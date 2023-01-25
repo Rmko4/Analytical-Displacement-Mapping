@@ -107,60 +107,6 @@ void Mesh::computeRegularPatchIndices() {
 }
 
 /**
- * @brief Mesh::computeLimitVertices Computes the limit subdivision positions
- * for the vertices of the mesh. The resulting vertex coordinates are stored in
- * limitVertexCoords.
- */
-void Mesh::computeLimitVertices() {
-  limitVertexCoords.clear();
-  limitVertexCoords.reserve(vertices.size());
-
-  // Compute new position for each vertex
-  for (int v = 0; v < vertices.size(); v++) {
-    Vertex *vert = &vertices[v];
-    QVector3D p0;
-
-    if (vert->isBoundaryVertex()) {
-      // Boundary case:
-      // Cubic B-spline limit stencil: 1 - 4 - 1
-      p0 += 2 / 3.F * vert->coords;
-      HalfEdge *prevEdge = vert->prevBoundaryHalfEdge();
-      HalfEdge *nextEdge = vert->nextBoundaryHalfEdge();
-      p0 += 1 / 6.F * prevEdge->origin->coords;
-      p0 += 1 / 6.F * nextEdge->next->origin->coords;
-    } else {
-      int n = vert->valence;
-      QVector3D vertCoords = vert->coords;
-      p0 = (n - 3) / static_cast<float>(n + 5) * vertCoords;
-
-      QVector3D sum;
-      HalfEdge *incidentEdge = vert->out;
-      // For every face and edge connected to the central vertex.
-      for (int i = 0; i < n; ++i) {
-        // Add m_i which are the edge midpoints.
-        QVector3D adjacentVertCoords = incidentEdge->next->origin->coords;
-        sum += (adjacentVertCoords + vertCoords) / 2;
-
-        // Add c_i which are the average of the vertices of a face
-        QVector3D ci;
-        for (int j = 0; j < incidentEdge->face->valence; ++j) {
-          ci += incidentEdge->origin->coords;
-          incidentEdge = incidentEdge->next;
-        }
-        ci /= incidentEdge->face->valence;
-        sum += ci;
-
-        // Move to next edge incident to central vertex
-        incidentEdge = incidentEdge->twin->next;
-      }
-      p0 += 4 / static_cast<float>(n * (n + 5)) * sum;
-    }
-
-    limitVertexCoords.append(p0);
-  }
-}
-
-/**
  * @brief Mesh::extractAttributes Extracts the normals, vertex coordinates and
  * indices into easy-to-access buffers.
  */

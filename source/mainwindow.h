@@ -28,10 +28,7 @@ private slots:
   void on_TessellationCheckBox_toggled(bool checked);
 
   void on_HideMeshCheckBox_toggled(bool checked);
-  void on_OriginalProjectionButton_pressed();
-  void on_LimitProjectionButton_pressed();
 
-  void on_bilinearButton_clicked();
   void on_bicubicButton_clicked();
 
   void on_InnerTessLevel_valueChanged(int arg1);

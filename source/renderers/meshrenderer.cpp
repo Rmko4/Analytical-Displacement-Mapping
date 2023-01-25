@@ -54,9 +54,7 @@ void MeshRenderer::initBuffers() {
  * @param mesh The mesh to update the buffer contents with.
  */
 void MeshRenderer::updateBuffers(Mesh &mesh) {
-  QVector<QVector3D> &vertexCoords = settings->limitProjectionMode
-                                         ? mesh.getLimitVertexCoords()
-                                         : mesh.getVertexCoords();
+  QVector<QVector3D> &vertexCoords = mesh.getVertexCoords();
   QVector<QVector3D> &vertexNormals = mesh.getVertexNorms();
   QVector<unsigned int> &polyIndices = mesh.getPolyIndices();
 

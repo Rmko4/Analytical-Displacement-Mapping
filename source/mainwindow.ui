@@ -230,6 +230,9 @@ QGroupBox::title {
           <property name="text">
            <string>Bicubic</string>
           </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
          </widget>
         </item>
         <item>
@@ -310,7 +313,7 @@ QGroupBox::title {
           <x>10</x>
           <y>20</y>
           <width>191</width>
-          <height>161</height>
+          <height>173</height>
          </rect>
         </property>
         <layout class="QVBoxLayout" name="verticalLayout_4">
