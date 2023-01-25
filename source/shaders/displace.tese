@@ -16,8 +16,6 @@ layout(location = 4) out vec3 vertbasenormal;
 out float vertU;
 out float vertV;
 
-out float tileSize;
-
 out float vertdisplacement;
 out vec3 vertbasenormaldu;
 out vec3 vertbasenormaldv;
@@ -26,8 +24,7 @@ uniform mat4 modelviewmatrix;
 uniform mat4 projectionmatrix;
 uniform mat3 normalmatrix;
 
-uniform float innerTessLevel;
-uniform float outerTessLevel;
+uniform float tileSize;
 
 uniform float tess_amplitude;
 
@@ -46,7 +43,7 @@ const mat3 biquadraticMt = mat3(1, -2,  1,
                                  1,  1,  0) / 2;
 
 float subpatchTransform(float t) {
-  return fract(innerTessLevel * t - 0.5);
+  return fract(tileSize * t - 0.5);
 }
 
 float coeff(float u, float v) {
@@ -150,7 +147,7 @@ float offset(float u, float v, float uC, float vC) {
   // vec3 U = vec3(u*u, u, 1);
   // vec3 V = vec3(v*v, v, 1);
 
-  float r = 1 / innerTessLevel;
+  float r = 1 / tileSize;
 
   mat3 coefficients = mat3(coeff(uC - r, vC - r), coeff(uC, vC - r), coeff(uC + r, vC - r),
                           coeff(uC - r, vC), coeff(uC, vC), coeff(uC + r, vC),
@@ -169,7 +166,7 @@ void main() {
   float uhat = subpatchTransform(u); // Maps to [0,1]
   float vhat = subpatchTransform(v);
 
-  float r = 1 / innerTessLevel;
+  float r = 1 / tileSize;
 
   // These are the center coordinates of the 3x3 subpatch in the main (u,v) domain.
   float uC = u + r * (0.5 - uhat); 
@@ -209,8 +206,8 @@ void main() {
                           coeff(uC - r, vC), coeff(uC, vC), coeff(uC + r, vC),
                           coeff(uC - r, vC + r), coeff(uC, vC + r), coeff(uC + r, vC + r));
 
-  float dDdu = innerTessLevel * dot(biquadraticMt * dU, coefficients * biquadraticMt * V);
-  float dDdv = innerTessLevel * dot(biquadraticMt * U, coefficients * biquadraticMt * dV);
+  float dDdu = tileSize * dot(biquadraticMt * dU, coefficients * biquadraticMt * V);
+  float dDdv = tileSize * dot(biquadraticMt * U, coefficients * biquadraticMt * dV);
 
   vec4 U4 = vec4(u*u*u, u*u, u, 1);
   vec4 V4 = vec4(v*v*v, v*v, v, 1);
@@ -282,8 +279,6 @@ void main() {
   vertdisplacement = D;
   vertbasenormaldu = dNsdu;
   vertbasenormaldv = dNsdv;
-
-  tileSize = innerTessLevel;
 
   // Approximate shading
   vec3 dfdu = dsdu + Ns * dDdu;

@@ -99,10 +99,12 @@ void MainWindow::on_TessellationCheckBox_toggled(bool checked) {
   }
   ui->MainDisplay->settings.uniformUpdateRequired = true;
 
-  ui->shadinggroupBox->setEnabled(ui->MainDisplay->settings.tesselationMode
-                                  && ui->MainDisplay->settings.currentTessellationShader == ShaderType::DISPLACEMENT);
-  ui->displacementGroupBox->setEnabled(ui->MainDisplay->settings.tesselationMode
-                                       && ui->MainDisplay->settings.currentTessellationShader == ShaderType::DISPLACEMENT);
+  bool displacementMode = ui->MainDisplay->settings.tesselationMode
+      && ui->MainDisplay->settings.currentTessellationShader == ShaderType::DISPLACEMENT;
+
+  ui->shadinggroupBox->setEnabled(displacementMode);
+  ui->displacementGroupBox->setEnabled(displacementMode);
+  ui->DynamicTessGroupBox->setEnabled(displacementMode);
 
   ui->MainDisplay->update();
 }
@@ -116,14 +118,12 @@ void MainWindow::on_HideMeshCheckBox_toggled(bool checked) {
   ui->MainDisplay->update();
 }
 
-
 void MainWindow::on_bicubicButton_clicked() {
   ui->MainDisplay->settings.currentTessellationShader = ShaderType::BICUBIC;
 
-  ui->shadinggroupBox->setEnabled(ui->MainDisplay->settings.tesselationMode
-                                  && ui->MainDisplay->settings.currentTessellationShader == ShaderType::DISPLACEMENT);
-  ui->displacementGroupBox->setEnabled(ui->MainDisplay->settings.tesselationMode
-                                       && ui->MainDisplay->settings.currentTessellationShader == ShaderType::DISPLACEMENT);
+  ui->shadinggroupBox->setEnabled(false);
+  ui->displacementGroupBox->setEnabled(false);
+  ui->DynamicTessGroupBox->setEnabled(false);
 
   ui->MainDisplay->settings.uniformUpdateRequired = true;
   ui->MainDisplay->updateBuffers(*currentMesh);
@@ -132,19 +132,17 @@ void MainWindow::on_bicubicButton_clicked() {
 void MainWindow::on_displacementButton_clicked() {
   ui->MainDisplay->settings.currentTessellationShader = ShaderType::DISPLACEMENT;
 
-  ui->shadinggroupBox->setEnabled(ui->MainDisplay->settings.tesselationMode
-                                  && ui->MainDisplay->settings.currentTessellationShader == ShaderType::DISPLACEMENT);
-  ui->displacementGroupBox->setEnabled(ui->MainDisplay->settings.tesselationMode
-                                       && ui->MainDisplay->settings.currentTessellationShader == ShaderType::DISPLACEMENT);
+  ui->shadinggroupBox->setEnabled(true);
+  ui->displacementGroupBox->setEnabled(true);
+  ui->DynamicTessGroupBox->setEnabled(true);
 
   ui->MainDisplay->settings.uniformUpdateRequired = true;
   ui->MainDisplay->updateBuffers(*currentMesh);
 }
 
 
-void MainWindow::on_InnerTessLevel_valueChanged(int arg1) {
-  ui->MainDisplay->settings.innerTessellationLevel = arg1;
-  ui->MainDisplay->settings.outerTessellationLevel = arg1;
+void MainWindow::on_TileSizeLevel_valueChanged(int arg1) {
+  ui->MainDisplay->settings.tileSize = arg1;
   ui->MainDisplay->settings.uniformUpdateRequired = true;
   ui->MainDisplay->update();
 }
@@ -155,7 +153,6 @@ void MainWindow::on_levelOfDetailCheckBox_clicked(bool checked)
   ui->MainDisplay->settings.uniformUpdateRequired = true;
   ui->MainDisplay->update();
 }
-
 
 void MainWindow::on_detailSlider_valueChanged(int value) {
   ui->MainDisplay->settings.tessDetail = static_cast<float>(value);
@@ -170,6 +167,7 @@ void MainWindow::on_amplitudeSlider_valueChanged(int value)
   ui->MainDisplay->settings.uniformUpdateRequired = true;
   ui->MainDisplay->update();
 }
+
 
 // Bubblewrap displacement:
 void MainWindow::on_radioButton_clicked()

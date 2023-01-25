@@ -6,8 +6,6 @@ layout(location = 0) in vec3[] vertcoords_vs;
 layout(location = 1) in vec3[] vertnormals_vs;
 layout(location = 2) in vec2[] vertndc_vs;
 
-in float[] tessFactor;
-
 layout(location = 0) out vec3[] vertcoords_tc;
 layout(location = 1) out vec3[] vertnormals_tc;
 
@@ -15,8 +13,7 @@ layout(location = 1) out vec3[] vertnormals_tc;
 uniform bool dynamicLoD;
 uniform float tessDetail;
 
-uniform float innerTessLevel;
-uniform float outerTessLevel;
+uniform float tileSize;
 
 float distance(int x, int y) {
   return length(vertndc_vs[x] - vertndc_vs[y]);
@@ -59,13 +56,13 @@ void main() {
       gl_TessLevelInner[0] = clamp(tessDetail * max(distance(5, 6), distance(9, 10)), 1.F, 64.F);
       gl_TessLevelInner[1] = clamp(tessDetail * max(distance(5, 9), distance(6, 10)), 1.F, 64.F);
     } else {
-      gl_TessLevelOuter[0] = outerTessLevel;
-      gl_TessLevelOuter[1] = outerTessLevel;
-      gl_TessLevelOuter[2] = outerTessLevel;
-      gl_TessLevelOuter[3] = outerTessLevel;
+      gl_TessLevelOuter[0] = tileSize;
+      gl_TessLevelOuter[1] = tileSize;
+      gl_TessLevelOuter[2] = tileSize;
+      gl_TessLevelOuter[3] = tileSize;
 
-      gl_TessLevelInner[0] = innerTessLevel;
-      gl_TessLevelInner[1] = innerTessLevel;
+      gl_TessLevelInner[0] = tileSize;
+      gl_TessLevelInner[1] = tileSize;
     }
   }
 

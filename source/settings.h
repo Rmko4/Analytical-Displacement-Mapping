@@ -21,8 +21,7 @@ typedef struct Settings {
   float dispRatio = 16.0f / 9.0f;
   float rotAngle = 0.0f;
 
-  float innerTessellationLevel = 4.F;
-  float outerTessellationLevel = 4.F;
+  float tileSize = 4.F;
 
   bool dynamicLoD = false;
   float tessDetail = 10.F;

@@ -199,7 +199,7 @@ QGroupBox::title {
          <x>10</x>
          <y>160</y>
          <width>201</width>
-         <height>201</height>
+         <height>231</height>
         </rect>
        </property>
        <property name="title">
@@ -243,16 +243,16 @@ QGroupBox::title {
          </widget>
         </item>
         <item>
-         <layout class="QHBoxLayout" name="InnerTessLayout">
+         <layout class="QHBoxLayout" name="TileSizeLayout">
           <item>
-           <widget class="QLabel" name="InnerTessLabel">
+           <widget class="QLabel" name="TileSizeLabel">
             <property name="text">
-             <string>Tesselation level</string>
+             <string>Tess level / Tile Size</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QSpinBox" name="InnerTessLevel">
+           <widget class="QSpinBox" name="TileSizeLevel">
             <property name="enabled">
              <bool>true</bool>
             </property>
@@ -267,30 +267,39 @@ QGroupBox::title {
          </layout>
         </item>
         <item>
-         <widget class="QCheckBox" name="levelOfDetailCheckBox">
-          <property name="text">
-           <string>Level-of-Detail</string>
+         <widget class="QGroupBox" name="DynamicTessGroupBox">
+          <property name="title">
+           <string>Dynamic Tessellation</string>
           </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLabel" name="detailLabel">
-          <property name="text">
-           <string>Detail multiplier:</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QSlider" name="detailSlider">
-          <property name="pageStep">
-           <number>10</number>
-          </property>
-          <property name="value">
-           <number>5</number>
-          </property>
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_3">
+           <item>
+            <widget class="QCheckBox" name="levelOfDetailCheckBox">
+             <property name="text">
+              <string>Level-of-Detail</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="detailLabel">
+             <property name="text">
+              <string>Detail multiplier:</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QSlider" name="detailSlider">
+             <property name="pageStep">
+              <number>10</number>
+             </property>
+             <property name="value">
+              <number>5</number>
+             </property>
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </widget>
         </item>
        </layout>
@@ -385,9 +394,9 @@ QGroupBox::title {
        <property name="geometry">
         <rect>
          <x>9</x>
-         <y>360</y>
+         <y>390</y>
          <width>201</width>
-         <height>191</height>
+         <height>161</height>
         </rect>
        </property>
        <property name="title">
@@ -397,12 +406,15 @@ QGroupBox::title {
         <property name="geometry">
          <rect>
           <x>9</x>
-          <y>19</y>
+          <y>14</y>
           <width>191</width>
-          <height>166</height>
+          <height>141</height>
          </rect>
         </property>
         <layout class="QVBoxLayout" name="shadingverticalLayout">
+         <property name="spacing">
+          <number>0</number>
+         </property>
          <item>
           <widget class="QLabel" name="label">
            <property name="text">

@@ -28,36 +28,29 @@ private slots:
   void on_TessellationCheckBox_toggled(bool checked);
 
   void on_HideMeshCheckBox_toggled(bool checked);
-
   void on_bicubicButton_clicked();
 
-  void on_InnerTessLevel_valueChanged(int arg1);
+  void on_TileSizeLevel_valueChanged(int arg1);
 
   void on_displacementButton_clicked();
-
   void on_amplitudeSlider_valueChanged(int value);
 
   void on_radioButton_clicked();
-
   void on_radioButton_2_clicked();
-
   void on_radioButton_3_clicked();
-
   void on_radioButton_4_clicked();
 
   void on_detailSlider_valueChanged(int value);
-
   void on_levelOfDetailCheckBox_clicked(bool checked);
 
   void on_phong_shad_clicked();
-
   void on_norm_shad_clicked();
 
   void on_true_norms_clicked();
-
   void on_approx_norms_clicked();
-
   void on_interpolated_norms_clicked();
+
+
 
 private:
   void importOBJ(const QString &fileName);

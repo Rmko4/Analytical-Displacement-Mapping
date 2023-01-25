@@ -13,16 +13,13 @@ layout(location = 4) in vec3 vertbasenormal;
 in float vertU;
 in float vertV;
 
-in float tileSize;
-
 in float vertdisplacement;
 in vec3 vertbasenormaldu;
 in vec3 vertbasenormaldv;
 
 out vec4 fColor;
 
-// uniform mat4 modelviewmatrix;
-// uniform mat4 projectionmatrix;
+uniform float tileSize;
 
 uniform mat3 normalmatrix;
 
