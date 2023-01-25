@@ -29,7 +29,7 @@ float TL_v(int vert, int left, int bottom, int right, int top) {
   return clamp(tessDetail * maxLength, 1.F, 64.F);
 }
 
-// Computes TL_e: Tessellation level of an edge
+// Computes TL_e: Tessellation level of edge
 // given two adjacent vertices.
 float TL_e(int left, int right) {
   return clamp(tessDetail * distance(left, right), 1.F, 64.F);
