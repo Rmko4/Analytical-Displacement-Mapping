@@ -35,6 +35,7 @@ uniform float tess_amplitude;
 uniform int displacement_mode;
 uniform int shading_mode;
 
+// Constants
 const float freq = .5F;
 
 const mat4 cubicM = mat4(-1, 3, -3, 1,
@@ -46,61 +47,12 @@ const mat3 quadratricM = mat3(1, -2,  1,
                                 -2,  2,  0,
                                  1,  1,  0) / 2;
 
+// Defined in procedural.glsl
+mat3 biquadraticCoeff(float u, float v, float r);
+
+// Transforms abstract patch coordinate to coordinate within biquadratic subpatch
 float subpatchTransform(float t) {
   return fract(tileSize * t - 0.5);
-}
-
-float coeff(float u, float v) {
-  // Forcing turnable symetry around 0.5, 0.5
-  u = mod(u, 1.);
-  v = mod(v, 1.);
-
-  if (v <= u && 1. - u < v) {
-    float tmp = u;
-    u = v;
-    v = 1. - tmp;
-  }
-  else if (v > u && 1. - u <= v)
-  {
-    u = 1. - u;
-    v = 1. - v;
-  }
-  else if (v >= u && 1. - u > v)
-  {
-    float tmp = u;
-    u = 1. - v;
-    v = tmp;
-  }
-
-  if (u > 0.5) // This is more than needed: also making each of the 4 triangle into two mirrored right angle triangles
-    u = 1. - u;
-
-  switch(displacement_mode)
-  {
-    case 0:
-      return tess_amplitude * sin(2 * M_PI * freq * u) * sin(2 * M_PI * freq * v);
-    case 1:
-      if (v > 0.4501) return 2 * tess_amplitude;
-      return min(1.0, v * 10.0) * tess_amplitude - tess_amplitude;
-    case 2:
-      return min(1.0, v * 5.0) * tess_amplitude;
-    case 3:
-    u = 7. * u;
-    v = 7.1 * v;
-    float u_f = floor(u);
-    float v_f = floor(v);
-    float u_c = ceil(u);
-    float v_c = ceil(v);
-    float r_ff = fract(sin(dot(vec2(u_f,v_f), vec2(12.9898, 78.233))) * 43758.5453) * tess_amplitude;
-    float r_fc = fract(sin(dot(vec2(u_f,v_c), vec2(12.9898, 78.233))) * 43758.5453) * tess_amplitude;
-    float r_cf = fract(sin(dot(vec2(u_c,v_f), vec2(12.9898, 78.233))) * 43758.5453) * tess_amplitude;
-    float r_cc = fract(sin(dot(vec2(u_c,v_c), vec2(12.9898, 78.233))) * 43758.5453) * tess_amplitude;
-    float a = mix(r_ff, r_cf, mod(u, 1.));
-    float b = mix(r_fc, r_cc, mod(u, 1.));
-    return mix(a, b, mod(v, 1.));
-  }
-
-  return fract(sin(dot(vec2(u,v), vec2(12.9898, 78.233))) * 43758.5453) * tess_amplitude;
 }
 
 vec3 baseSurfacePosition(float u, float v, mat4 Gx, mat4 Gy, mat4 Gz) {
@@ -163,15 +115,27 @@ float offset(float u, float v, float uC, float vC) {
 
   float r = 1 / tileSize;
 
-  mat3 coefficients = mat3(coeff(uC - r, vC - r), coeff(uC, vC - r), coeff(uC + r, vC - r),
-                          coeff(uC - r, vC), coeff(uC, vC), coeff(uC + r, vC),
-                          coeff(uC - r, vC + r), coeff(uC, vC + r), coeff(uC + r, vC + r));
+  mat3 coefficients = biquadraticCoeff(uC, vC, r);
 
   float D = dot(quadratricM * U, coefficients * quadratricM * V);
   return D;
 }
 
+vec3 tensorAccumulatePatch(vec4 x, vec4 y) {
+  vec3 res = vec3(0.F);
+
+  for (int i = 0; i < 4; i++) {
+    for (int j = 0; j < 4; j++) {
+      res += x[i] * y[j] * vertcoords_tc[4*j + i];
+    }
+  }
+
+  return res;
+}
+
 void main() {
+
+  // ----------------------- Coordinates ----------------------------
   // Abstract patch coordinates
   float u = gl_TessCoord.x;
   float v = gl_TessCoord.y;
@@ -183,8 +147,51 @@ void main() {
   float r = 1 / tileSize;
 
   // These are the center coordinates of the 3x3 subpatch in the main (u,v) domain.
-  float uC = u + r * (0.5 - uhat); 
-  float vC = v + r * (0.5 - vhat);  
+  float uC = u + r * (0.5 - uhat);
+  float vC = v + r * (0.5 - vhat);
+
+  // ---------------------- Bicubic patch ---------------------------
+
+  // The cubic basis functions
+  vec4 B3u = cubicM * vec4(u*u*u, u*u, u, 1);
+  vec4 B3v = cubicM * vec4(v*v*v, v*v, v, 1);
+
+  // The partials of cubic basis functions
+  vec4 dB3du = cubicM * vec4(3*u*u, 2*u, 1, 0);
+  vec4 dB3dv = cubicM * vec4(3*v*v, 2*v, 1, 0);
+
+  // Base surface s
+  vec3 s = tensorAccumulatePatch(B3u, B3v);
+
+  // Partials of base surface s
+  vec3 dsdu = tensorAccumulatePatch(dB3du, B3v);
+  vec3 dsdv = tensorAccumulatePatch(B3u, dB3dv);
+
+  // Normal of base surface s
+  vec3 Ns = normalize(cross(dsdu, dsdv));
+
+  // -------------------- Biquadratic patch -------------------------
+
+  // The quadratic basis functions
+  vec3 B2u = quadratricM * vec3(u*u, u, 1);
+  vec3 B2v = quadratricM * vec3(v*v, v, 1);
+  
+  // The partials of quadratic basis functions
+  vec3 dB2du = quadratricM * vec3(2*uhat, 1, 0);
+  vec3 dB2dv = quadratricM * vec3(2*vhat, 1, 0);
+
+  // Biquadratic coefficients grid
+  mat3 coefficients = biquadraticCoeff(uC, vC, r);
+
+  // Displacement D
+  float D = dot(B2u, coefficients * B2v);
+
+  // Partials of displacement D
+  float dDdu = tileSize * dot(dB2du, coefficients * B2v);
+  float dDdv = tileSize * dot(B2u, coefficients * dB2dv);
+
+  // The displaced vertex position f
+  vec3 f = s + Ns * D;
 
   // Use three control point matrices, one for each spatial dimension.
   mat4 Gx = mat4(vertcoords_tc[0].x, vertcoords_tc[1].x, vertcoords_tc[2].x, vertcoords_tc[3].x,
@@ -203,12 +210,12 @@ void main() {
               vertcoords_tc[12].z, vertcoords_tc[13].z, vertcoords_tc[14].z, vertcoords_tc[15].z);
 
 
-  vec3 s = baseSurfacePosition(u, v, Gx, Gy, Gz);
-  vec3 Ns = baseSurfaceNormal(u, v, Gx, Gy, Gz);
-  float D = offset(uhat, vhat, uC, vC);
+  // vec3 s = baseSurfacePosition(u, v, Gx, Gy, Gz);
+  // vec3 Ns = baseSurfaceNormal(u, v, Gx, Gy, Gz);
+  // float D = offset(uhat, vhat, uC, vC);
   // float D = coeff(u, v);
 
-  vec3 f = s + Ns * D;
+
 
   vec3 U = vec3(uhat*uhat, uhat, 1);
   vec3 V = vec3(vhat*vhat, vhat, 1);
@@ -216,12 +223,6 @@ void main() {
   vec3 dU = vec3(2*uhat, 1, 0);
   vec3 dV = vec3(2*vhat, 1, 0);
 
-  mat3 coefficients = mat3(coeff(uC - r, vC - r), coeff(uC, vC - r), coeff(uC + r, vC - r),
-                          coeff(uC - r, vC), coeff(uC, vC), coeff(uC + r, vC),
-                          coeff(uC - r, vC + r), coeff(uC, vC + r), coeff(uC + r, vC + r));
-
-  float dDdu = tileSize * dot(quadratricM * dU, coefficients * quadratricM * V);
-  float dDdv = tileSize * dot(quadratricM * U, coefficients * quadratricM * dV);
 
   vec4 U4 = vec4(u*u*u, u*u, u, 1);
   vec4 V4 = vec4(v*v*v, v*v, v, 1);
@@ -237,10 +238,12 @@ void main() {
   float tanVZ = dot(cubicM * U4, Gz * cubicM * dV4);
 
   // Cross product of tangent lines yields normal
-  vec3 dsdu = vec3(tanUX, tanUY, tanUZ);
-  vec3 dsdv = vec3(tanVX, tanVY, tanVZ);
+  // vec3 dsdu = vec3(tanUX, tanUY, tanUZ);
+  // vec3 dsdv = vec3(tanVX, tanVY, tanVZ);
 
 
+
+  // Only for true
   vec4 dUU4 = vec4(6*u, 2, 0, 0);
   vec4 dVV4 = vec4(6*v, 2, 0, 0);
 
@@ -281,6 +284,7 @@ void main() {
 
   vec3 dNsdu = dNsnndu - Ns * (dot(dNsnndu, Ns)) / NsLength;
   vec3 dNsdv = dNsnndv - Ns * (dot(dNsnndv, Ns)) / NsLength;
+  // END
 
   vertU = u;
   vertV = v;

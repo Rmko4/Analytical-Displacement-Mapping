@@ -32,13 +32,15 @@ uniform int displacement_mode;
 uniform int shading_mode;
 uniform int normal_mode;
 
-
 // Constants
 const float freq = .5F;
 const vec3 matcolour = vec3(0.53, 0.80, 0.87);
 
 // Defined in shading.glsl
 vec3 phongShading(vec3 matCol, vec3 coords, vec3 normal);
+
+// Defined in procedural.glsl
+mat3 biquadraticCoeff(float u, float v, float r);
 
 float subpatchTransform(float t) {
   return fract(tileSize * t - 0.5);
@@ -49,59 +51,6 @@ const mat3 biquadraticMt = mat3(1, -2,  1,
                                  1,  1,  0) / 2;
 
 
-float coeff(float u, float v) {
-  // Forcing turnable symetry around 0.5, 0.5
-  u = mod(u, 1.);
-  v = mod(v, 1.);
-
-  if (v <= u && 1. - u < v) {
-    float tmp = u;
-    u = v;
-    v = 1. - tmp;
-  }
-  else if (v > u && 1. - u <= v)
-  {
-    u = 1. - u;
-    v = 1. - v;
-  }
-  else if (v >= u && 1. - u > v)
-  {
-    float tmp = u;
-    u = 1. - v;
-    v = tmp;
-  }
-
-  if (u > 0.5) // This is more than needed: also making each of the 4 triangle into two mirrored right angle triangles
-    u = 1. - u;
-
-  switch(displacement_mode)
-  {
-    case 0:
-      return tess_amplitude * sin(2 * M_PI * freq * u) * sin(2 * M_PI * freq * v);
-    case 1:
-      if (v > 0.4501) return 2 * tess_amplitude;
-      return min(1.0, v * 10.0) * tess_amplitude - tess_amplitude;
-    case 2:
-      return min(1.0, v * 5.0) * tess_amplitude;
-    case 3:
-    u = 7. * u;
-    v = 7.1 * v;
-    float u_f = floor(u);
-    float v_f = floor(v);
-    float u_c = ceil(u);
-    float v_c = ceil(v);
-    float r_ff = fract(sin(dot(vec2(u_f,v_f), vec2(12.9898, 78.233))) * 43758.5453) * tess_amplitude;
-    float r_fc = fract(sin(dot(vec2(u_f,v_c), vec2(12.9898, 78.233))) * 43758.5453) * tess_amplitude;
-    float r_cf = fract(sin(dot(vec2(u_c,v_f), vec2(12.9898, 78.233))) * 43758.5453) * tess_amplitude;
-    float r_cc = fract(sin(dot(vec2(u_c,v_c), vec2(12.9898, 78.233))) * 43758.5453) * tess_amplitude;
-    float a = mix(r_ff, r_cf, mod(u, 1.));
-    float b = mix(r_fc, r_cc, mod(u, 1.));
-    return mix(a, b, mod(v, 1.));
-  }
-
-  return fract(sin(dot(vec2(u,v), vec2(12.9898, 78.233))) * 43758.5453) * tess_amplitude;
-  //return tess_amplitude * sin(2 * M_PI * freq * u) * sin(2 * M_PI * freq * v);
-}
 
 void main() {
   float u = subpatchTransform(vertU); // Maps to [0,1]
@@ -123,9 +72,7 @@ void main() {
   float uC = vertU + r * (0.5 - u); 
   float vC = vertV + r * (0.5 - v);  
   
-  mat3 coefficients = mat3(coeff(uC - r, vC - r), coeff(uC, vC - r), coeff(uC + r, vC - r),
-                          coeff(uC - r, vC), coeff(uC, vC), coeff(uC + r, vC),
-                          coeff(uC - r, vC + r), coeff(uC, vC + r), coeff(uC + r, vC + r));
+  mat3 coefficients = biquadraticCoeff(uC, vC, r);
 
   vec3 U = vec3(u*u, u, 1);
   vec3 V = vec3(v*v, v, 1);

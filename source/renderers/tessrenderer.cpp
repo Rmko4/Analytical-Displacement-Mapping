@@ -42,6 +42,7 @@ TessellationRenderer::constructTesselationShader(const QString &name) const {
   QString pathTesE = ":/shaders/" + name + ".tese";
   QString pathFrag = ":/shaders/" + name + ".frag";
   QString pathShading = ":/shaders/shading.glsl";
+  QString pathProcedural = ":/shaders/procedural.glsl";
 
   // we use the qt wrapper functions for shader objects
   QOpenGLShaderProgram *shader = new QOpenGLShaderProgram();
@@ -51,6 +52,8 @@ TessellationRenderer::constructTesselationShader(const QString &name) const {
                                   pathTesE);
   shader->addShaderFromSourceFile(QOpenGLShader::Fragment, pathFrag);
   shader->addShaderFromSourceFile(QOpenGLShader::Fragment, pathShading);
+  shader->addShaderFromSourceFile(QOpenGLShader::TessellationEvaluation, pathProcedural);
+  shader->addShaderFromSourceFile(QOpenGLShader::Fragment, pathProcedural);
   shader->link();
   return shader;
 }

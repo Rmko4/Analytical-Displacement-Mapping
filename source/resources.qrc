@@ -14,6 +14,7 @@
         <file>models/5x5_plane.obj</file>
         <file>models/5x5_plane_random_height.obj</file>
         <file>models/RegularGrid.obj</file>
+        <file>shaders/procedural.glsl</file>
     </qresource>
     <qresource prefix="/models">
         <file alias="Suzanne.obj">models/SuzanneQuad.obj</file>
