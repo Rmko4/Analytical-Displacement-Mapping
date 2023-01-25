@@ -391,6 +391,9 @@ QGroupBox::title {
        </widget>
       </widget>
       <widget class="QGroupBox" name="shadinggroupBox">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
        <property name="geometry">
         <rect>
          <x>9</x>

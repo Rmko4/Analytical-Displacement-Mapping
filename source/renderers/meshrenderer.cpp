@@ -93,7 +93,11 @@ void MeshRenderer::updateUniforms() {
   gl->glUniformMatrix3fv(uniNormalMatrix, 1, false,
                          settings->normalMatrix.data());
 
-  gl->glUniform1i(uniShadingMode, settings->shading_mode);
+  int shading_mode = settings->shading_mode == 1
+      && settings->currentTessellationShader == ShaderType::DISPLACEMENT
+      && settings->tesselationMode == true ? 1 : 0;
+
+  gl->glUniform1i(uniShadingMode, shading_mode);
 }
 
 /**
