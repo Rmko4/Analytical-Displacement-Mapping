@@ -4,14 +4,17 @@
 
 layout(quads, fractional_even_spacing, ccw) in;
 
+// layout qualified in and out vars
 layout(location = 0) in vec3[] vertcoords_tc;
 layout(location = 1) in vec3[] vertnormals_tc;
 
 layout(location = 0) out vec3 vertcoords_te;
 layout(location = 1) out vec3 vertnormals_te;
-layout(location = 2) out vec3 vertbasesurfacedu_te;
-layout(location = 3) out vec3 vertbasesurfacedv_te;
-layout(location = 4) out vec3 vertbasenormal;
+
+// Out vars
+out vec3 vertbasesurfacedu;
+out vec3 vertbasesurfacedv;
+out vec3 vertbasenormal;
 
 out float vertU;
 out float vertV;
@@ -20,6 +23,7 @@ out float vertdisplacement;
 out vec3 vertbasenormaldu;
 out vec3 vertbasenormaldv;
 
+// Uniforms
 uniform mat4 modelviewmatrix;
 uniform mat4 projectionmatrix;
 uniform mat3 normalmatrix;
@@ -29,16 +33,16 @@ uniform float tileSize;
 uniform float tess_amplitude;
 
 uniform int displacement_mode;
+uniform int shading_mode;
 
 const float freq = .5F;
-// const float amplitude = -.1F;
 
-const mat4 bicubicMt = mat4(-1, 3, -3, 1,
+const mat4 cubicM = mat4(-1, 3, -3, 1,
                             3, -6, 3, 0,
                             -3, 0, 3, 0,
                             1, 4, 1, 0) / 6;
 
-const mat3 biquadraticMt = mat3(1, -2,  1,
+const mat3 quadratricM = mat3(1, -2,  1,
                                 -2,  2,  0,
                                  1,  1,  0) / 2;
 
@@ -97,7 +101,6 @@ float coeff(float u, float v) {
   }
 
   return fract(sin(dot(vec2(u,v), vec2(12.9898, 78.233))) * 43758.5453) * tess_amplitude;
-  //return tess_amplitude * sin(2 * M_PI * freq * u) * sin(2 * M_PI * freq * v);
 }
 
 vec3 baseSurfacePosition(float u, float v, mat4 Gx, mat4 Gy, mat4 Gz) {
@@ -107,11 +110,22 @@ vec3 baseSurfacePosition(float u, float v, mat4 Gx, mat4 Gy, mat4 Gz) {
   vec4 U = vec4(u*u*u, u*u, u, 1);
   vec4 V = vec4(v*v*v, v*v, v, 1);
 
-  float sX = dot(bicubicMt * U, Gx * bicubicMt * V);
-  float sY = dot(bicubicMt * U, Gy * bicubicMt * V);
-  float sZ = dot(bicubicMt * U, Gz * bicubicMt * V);
+  vec4 cubicU = cubicM * U;
+  vec4 cubicV = cubicM * V;
 
-  vec3 s = vec3(sX, sY, sZ);
+  vec3 s = vec3(0.F);
+
+  for (int i = 0; i < 4; i++) {
+    for (int j = 0; j < 4; j++) {
+      s += cubicU[i] * cubicV[j] * vertcoords_tc[4*j + i];
+    }
+  }
+
+  // float sX = dot(cubicM * U, Gx * cubicM * V);
+  // float sY = dot(cubicM * U, Gy * cubicM * V);
+  // float sZ = dot(cubicM * U, Gz * cubicM * V);
+
+  // vec3 s = vec3(sX, sY, sZ);
   return s;
 }
 
@@ -123,12 +137,12 @@ vec3 baseSurfaceNormal(float u, float v, mat4 Gx, mat4 Gy, mat4 Gz) {
   vec4 dU = vec4(3*u*u, 2*u, 1, 0);
   vec4 dV = vec4(3*v*v, 2*v, 1, 0); 
 
-  float tanUX = dot(bicubicMt * dU, Gx * bicubicMt * V);
-  float tanUY = dot(bicubicMt * dU, Gy * bicubicMt * V);
-  float tanUZ = dot(bicubicMt * dU, Gz * bicubicMt * V);
-  float tanVX = dot(bicubicMt * U, Gx * bicubicMt * dV);
-  float tanVY = dot(bicubicMt * U, Gy * bicubicMt * dV);
-  float tanVZ = dot(bicubicMt * U, Gz * bicubicMt * dV);
+  float tanUX = dot(cubicM * dU, Gx * cubicM * V);
+  float tanUY = dot(cubicM * dU, Gy * cubicM * V);
+  float tanUZ = dot(cubicM * dU, Gz * cubicM * V);
+  float tanVX = dot(cubicM * U, Gx * cubicM * dV);
+  float tanVY = dot(cubicM * U, Gy * cubicM * dV);
+  float tanVZ = dot(cubicM * U, Gz * cubicM * dV);
 
   // Cross product of tangent lines yields normal
   vec3 sU = vec3(tanUX, tanUY, tanUZ);
@@ -153,7 +167,7 @@ float offset(float u, float v, float uC, float vC) {
                           coeff(uC - r, vC), coeff(uC, vC), coeff(uC + r, vC),
                           coeff(uC - r, vC + r), coeff(uC, vC + r), coeff(uC + r, vC + r));
 
-  float D = dot(biquadraticMt * U, coefficients * biquadraticMt * V);
+  float D = dot(quadratricM * U, coefficients * quadratricM * V);
   return D;
 }
 
@@ -206,8 +220,8 @@ void main() {
                           coeff(uC - r, vC), coeff(uC, vC), coeff(uC + r, vC),
                           coeff(uC - r, vC + r), coeff(uC, vC + r), coeff(uC + r, vC + r));
 
-  float dDdu = tileSize * dot(biquadraticMt * dU, coefficients * biquadraticMt * V);
-  float dDdv = tileSize * dot(biquadraticMt * U, coefficients * biquadraticMt * dV);
+  float dDdu = tileSize * dot(quadratricM * dU, coefficients * quadratricM * V);
+  float dDdv = tileSize * dot(quadratricM * U, coefficients * quadratricM * dV);
 
   vec4 U4 = vec4(u*u*u, u*u, u, 1);
   vec4 V4 = vec4(v*v*v, v*v, v, 1);
@@ -215,12 +229,12 @@ void main() {
   vec4 dU4 = vec4(3*u*u, 2*u, 1, 0);
   vec4 dV4 = vec4(3*v*v, 2*v, 1, 0);
 
-  float tanUX = dot(bicubicMt * dU4, Gx * bicubicMt * V4);
-  float tanUY = dot(bicubicMt * dU4, Gy * bicubicMt * V4);
-  float tanUZ = dot(bicubicMt * dU4, Gz * bicubicMt * V4);
-  float tanVX = dot(bicubicMt * U4, Gx * bicubicMt * dV4);
-  float tanVY = dot(bicubicMt * U4, Gy * bicubicMt * dV4);
-  float tanVZ = dot(bicubicMt * U4, Gz * bicubicMt * dV4);
+  float tanUX = dot(cubicM * dU4, Gx * cubicM * V4);
+  float tanUY = dot(cubicM * dU4, Gy * cubicM * V4);
+  float tanUZ = dot(cubicM * dU4, Gz * cubicM * V4);
+  float tanVX = dot(cubicM * U4, Gx * cubicM * dV4);
+  float tanVY = dot(cubicM * U4, Gy * cubicM * dV4);
+  float tanVZ = dot(cubicM * U4, Gz * cubicM * dV4);
 
   // Cross product of tangent lines yields normal
   vec3 dsdu = vec3(tanUX, tanUY, tanUZ);
@@ -230,21 +244,21 @@ void main() {
   vec4 dUU4 = vec4(6*u, 2, 0, 0);
   vec4 dVV4 = vec4(6*v, 2, 0, 0);
 
-  float tanUUX = dot(bicubicMt * dUU4, Gx * bicubicMt * V4);
-  float tanUUY = dot(bicubicMt * dUU4, Gy * bicubicMt * V4);
-  float tanUUZ = dot(bicubicMt * dUU4, Gz * bicubicMt * V4);
+  float tanUUX = dot(cubicM * dUU4, Gx * cubicM * V4);
+  float tanUUY = dot(cubicM * dUU4, Gy * cubicM * V4);
+  float tanUUZ = dot(cubicM * dUU4, Gz * cubicM * V4);
 
   vec3 dsduu = vec3(tanUUX, tanUUY, tanUUZ);
 
-  float tanVVX = dot(bicubicMt * U4, Gx * bicubicMt * dVV4);
-  float tanVVY = dot(bicubicMt * U4, Gy * bicubicMt * dVV4);
-  float tanVVZ = dot(bicubicMt * U4, Gz * bicubicMt * dVV4);
+  float tanVVX = dot(cubicM * U4, Gx * cubicM * dVV4);
+  float tanVVY = dot(cubicM * U4, Gy * cubicM * dVV4);
+  float tanVVZ = dot(cubicM * U4, Gz * cubicM * dVV4);
 
   vec3 dsdvv = vec3(tanVVX, tanVVY, tanVVZ);
 
-  float tanUVX = dot(bicubicMt * dU4, Gx * bicubicMt * dV4);
-  float tanUVY = dot(bicubicMt * dU4, Gy * bicubicMt * dV4);
-  float tanUVZ = dot(bicubicMt * dU4, Gz * bicubicMt * dV4);
+  float tanUVX = dot(cubicM * dU4, Gx * cubicM * dV4);
+  float tanUVY = dot(cubicM * dU4, Gy * cubicM * dV4);
+  float tanUVZ = dot(cubicM * dU4, Gz * cubicM * dV4);
 
   vec3 dsduv = vec3(tanUVX, tanUVY, tanUVZ);
 
@@ -271,8 +285,8 @@ void main() {
   vertU = u;
   vertV = v;
 
-  vertbasesurfacedu_te = dsdu;
-  vertbasesurfacedv_te = dsdv;
+  vertbasesurfacedu = dsdu;
+  vertbasesurfacedv = dsdv;
 
   vertbasenormal = Ns;
 

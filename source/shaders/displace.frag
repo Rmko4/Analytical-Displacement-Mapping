@@ -3,12 +3,14 @@
 
 #define M_PI 3.1415926538
 
+// Layout qualified in vars
 layout(location = 0) in vec3 vertcoords_fs;
 layout(location = 1) in vec3 vertnormal_fs;
 
-layout(location = 2) in vec3 vertbasesurfacedu_fs;
-layout(location = 3) in vec3 vertbasesurfacedv_fs;
-layout(location = 4) in vec3 vertbasenormal;
+// In vars
+in vec3 vertbasesurfacedu;
+in vec3 vertbasesurfacedv;
+in vec3 vertbasenormal;
 
 in float vertU;
 in float vertV;
@@ -17,18 +19,21 @@ in float vertdisplacement;
 in vec3 vertbasenormaldu;
 in vec3 vertbasenormaldv;
 
+// Out vars
 out vec4 fColor;
 
-uniform float tileSize;
-
+// Uniforms
 uniform mat3 normalmatrix;
 
+uniform float tileSize;
 uniform float tess_amplitude;
-uniform int displacement_mode;
 
+uniform int displacement_mode;
 uniform int shading_mode;
 uniform int normal_mode;
 
+
+// Constants
 const float freq = .5F;
 const vec3 matcolour = vec3(0.53, 0.80, 0.87);
 
@@ -104,8 +109,8 @@ void main() {
 
   vec3 Ns = vertbasenormal;
 
-  vec3 dsdu = vertbasesurfacedu_fs;
-  vec3 dsdv = vertbasesurfacedv_fs;
+  vec3 dsdu = vertbasesurfacedu;
+  vec3 dsdv = vertbasesurfacedv;
 
   float D = vertdisplacement;
 
@@ -190,12 +195,12 @@ void main() {
   // Not putting all the above calculations inside the if clause because glsl can't do
   // real conditional branching anyway
   if (shading_mode == 0) {
-      // Phong shading:
-      fColor = vec4(col, 1.0);
+    // Phong shading:
+    fColor = vec4(col, 1.0);
   }
   else {
-      // Normal shading:
-      fColor = vec4(normalColor, 1.0);
+    // Normal shading:
+    fColor = vec4(normalColor, 1.0);
   }
 
 
