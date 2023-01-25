@@ -22,7 +22,6 @@ TessellationRenderer::~TessellationRenderer() {
  * Tessellation.
  */
 void TessellationRenderer::initShaders() {
-  shaders[ShaderType::BILINEAR] = constructTesselationShader("patch");
   shaders[ShaderType::BICUBIC] = constructTesselationShader("bicubic");
   shaders[ShaderType::DISPLACEMENT] = constructTesselationShader("displace");
 }
@@ -90,11 +89,8 @@ void TessellationRenderer::updateBuffers(Mesh &currentMesh) {
   QVector<QVector3D> &vertexNormals = currentMesh.getVertexNorms();
 
   QVector<unsigned int> *meshIndices;
-  if (settings->currentTessellationShader == ShaderType::BILINEAR) {
-    meshIndices = &currentMesh.getQuadIndices();
-  } else { // If current shader is bicubic
-    meshIndices = &currentMesh.getRegularPatchIndices();
-  }
+  meshIndices = &currentMesh.getRegularPatchIndices();
+
 
   gl->glBindBuffer(GL_ARRAY_BUFFER, meshCoordsBO);
   gl->glBufferData(GL_ARRAY_BUFFER, sizeof(QVector3D) * vertexCoords.size(),
@@ -166,10 +162,7 @@ void TessellationRenderer::draw() {
 
   gl->glBindVertexArray(vao);
 
-  GLuint patchSize =
-      settings->currentTessellationShader == ShaderType::BILINEAR ? 4 : 16;
-
-  gl->glPatchParameteri(GL_PATCH_VERTICES, patchSize);
+  gl->glPatchParameteri(GL_PATCH_VERTICES, 16);
   gl->glDrawElements(GL_PATCHES, meshIBOSize, GL_UNSIGNED_INT, nullptr);
 
   gl->glBindVertexArray(0);

@@ -2,10 +2,6 @@
     <qresource prefix="/">
         <file>shaders/phong.frag</file>
         <file>shaders/phong.vert</file>
-        <file>shaders/patch.tesc</file>
-        <file>shaders/patch.tese</file>
-        <file>shaders/patch.vert</file>
-        <file>shaders/patch.frag</file>
         <file>shaders/shading.glsl</file>
         <file>shaders/bicubic.frag</file>
         <file>shaders/bicubic.tesc</file>
