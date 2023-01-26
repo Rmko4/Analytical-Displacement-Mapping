@@ -46,111 +46,89 @@ float subpatchTransform(float t) {
   return fract(tileSize * t - 0.5);
 }
 
-const mat3 biquadraticMt = mat3(1, -2,  1,
+const mat3 quadratricM = mat3(1, -2,  1,
                                 -2,  2,  0,
                                  1,  1,  0) / 2;
 
-
-
 void main() {
-  float u = subpatchTransform(vertU); // Maps to [0,1]
-  float v = subpatchTransform(vertV);
-
-  vec3 Ns = vertbasenormal;
-
   vec3 dsdu = vertbasesurfacedu;
   vec3 dsdv = vertbasesurfacedv;
+  vec3 Ns = vertbasenormal;
 
-  float D = vertdisplacement;
+  float dDdu;
+  float dDdv;
 
-  vec3 dNsdu = vertbasenormaldu;
-  vec3 dNsdv = vertbasenormaldv;
-
-  float r = 1 / tileSize;
-
-// Yields the center coordinates [0,1], such that it is on k*r for any positive integer k.
-  float uC = vertU + r * (0.5 - u); 
-  float vC = vertV + r * (0.5 - v);  
+  // -------------------- Displacement partials ---------------------
   
-  mat3 coefficients = biquadraticCoeff(uC, vC, r);
+  // Non-interpolatory case
+  if (normal_mode == 0 || normal_mode == 1) {
+    // These are the coordinates of the 3x3 subpatch for displacement
+    float u = subpatchTransform(vertU); // Maps to [0,1]
+    float v = subpatchTransform(vertV);
 
-  vec3 U = vec3(u*u, u, 1);
-  vec3 V = vec3(v*v, v, 1);
+    float r = 1 / tileSize;
 
-  vec3 dU = vec3(2*u, 1, 0);
-  vec3 dV = vec3(2*v, 1, 0);
+    // These are the center coordinates of the 3x3 subpatch in the main (u,v) domain.
+    float uC = vertU + r * (0.5 - u); 
+    float vC = vertV + r * (0.5 - v);  
 
+    // The quadratic basis functions
+    vec3 B2u = quadratricM * vec3(u*u, u, 1);
+    vec3 B2v = quadratricM * vec3(v*v, v, 1);
+    
+    // The partials of quadratic basis functions
+    vec3 dB2du = quadratricM * vec3(2*u, 1, 0);
+    vec3 dB2dv = quadratricM * vec3(2*v, 1, 0);
 
-  float dDdu = tileSize * dot(biquadraticMt * dU, coefficients * biquadraticMt * V);
-  float dDdv = tileSize * dot(biquadraticMt * U, coefficients * biquadraticMt * dV);
+    // Biquadratic coefficients grid
+    mat3 coefficients = biquadraticCoeff(uC, vC, r);
 
-  // Interpolated approximate normals shading
-  // vec3 col = phongShading(matcolour, vertcoords_fs, vertnormal_fs);
-  
-  // Approximate normals shading
-  vec3 dfduApprox = dsdu + Ns * dDdu;
-  vec3 dfdvvApprox = dsdv + Ns * dDdv;
+    // Partials of displacement D
+    dDdu = tileSize * dot(dB2du, coefficients * B2v);
+    dDdv = tileSize * dot(B2u, coefficients * dB2dv);
+  }
 
-  vec3 normalFApprox = normalize(cross(dfduApprox, dfdvvApprox));
-  normalFApprox = normalize(normalmatrix * normalFApprox);
+  // --------------------- Normal computation  ----------------------
 
-  // vec3 col = phongShading(matcolour, vertcoords_fs, normalFApprox);
-
-
-  // True normals shading
-  vec3 dfdu = dsdu + Ns * dDdu + dNsdu * D;
-  vec3 dfdv = dsdv + Ns * dDdv + dNsdv * D;
-
-  vec3 normalF = normalize(cross(dfdu, dfdv));
-  normalF = normalize(normalmatrix * normalF);
-
-
-  // Not putting all the above calculations inside the if clause because glsl can't do
-  // real conditional branching anyway
-  vec3 finalNormal = normalF;
+  vec3 finalNormal = vertnormal_fs;
   if (normal_mode == 1) {
-      finalNormal = normalize(normalFApprox);
+    // Approximate normals shading
+    vec3 dfduApprox = dsdu + Ns * dDdu;
+    vec3 dfdvvApprox = dsdv + Ns * dDdv;
+
+    vec3 NfApprox = normalize(cross(dfduApprox, dfdvvApprox));
+    NfApprox = normalize(normalmatrix * NfApprox);
+
+    finalNormal = normalize(NfApprox);
   }
-  else if (normal_mode == 2) {
-      finalNormal = normalize(vertnormal_fs);
+  else if (normal_mode == 0) {
+    // True normals shading
+    vec3 dNsdu = vertbasenormaldu;
+    vec3 dNsdv = vertbasenormaldv;
+    float D = vertdisplacement;
+
+    vec3 dfdu = dsdu + Ns * dDdu + dNsdu * D;
+    vec3 dfdv = dsdv + Ns * dDdv + dNsdv * D;
+
+    vec3 Nf = normalize(cross(dfdu, dfdv));
+    Nf = normalize(normalmatrix * Nf);
+    
+    finalNormal = normalize(Nf);
   }
 
+  // --------------------------- Shading ----------------------------
 
-
-  vec3 col = phongShading(matcolour, vertcoords_fs, finalNormal);
-
-
-
-
-
-  // vec3 normalS = normalize(normalmatrix * Ns);
-
-  // vec3 col = vec3(0.2 * dDdu, 0.2 * dDdv, 0);
-  // vec3 col = vec3(vertU, vertV, 0);
-  // vec3 col = vec3(dNsdu[0], dNsdu[1], dNsdu[2]);
-
-  // vec4 posC = projectionmatrix * modelviewmatrix * vec4(vertcoords_fs, 1.0);
-  // float z = posC.z;
-  // z /= posC.w;
-  // vec3 col = vec3((1.0 - z)/2, posC.w/10, posC.z);
-
-
-  // Use any of the three normals
-  vec3 normalColor = 0.5 * normalize(finalNormal) + vec3(0.5, 0.5, 0.5);
-
-
-  // Not putting all the above calculations inside the if clause because glsl can't do
-  // real conditional branching anyway
+  vec3 color;
   if (shading_mode == 0) {
     // Phong shading:
-    fColor = vec4(col, 1.0);
+    color = phongShading(matcolour, vertcoords_fs, finalNormal);
   }
   else {
     // Normal shading:
-    fColor = vec4(normalColor, 1.0);
+    color = 0.5 * normalize(finalNormal) + vec3(0.5, 0.5, 0.5);
   }
 
-
+  fColor = vec4(color, 1.0);
 
   // Quite hacky trick, but this makes sure that if the control mesh and the
   // tessellated mesh are very close to each other, the tessellated mesh is

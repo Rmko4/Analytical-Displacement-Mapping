@@ -33,7 +33,7 @@ uniform float tileSize;
 uniform float tess_amplitude;
 
 uniform int displacement_mode;
-uniform int shading_mode;
+uniform int normal_mode;
 
 // Constants
 const float freq = .5F;
@@ -137,7 +137,7 @@ void main() {
 
   // ------------------------- True shading -------------------------
 
-  if (shading_mode == 2) {
+  if (normal_mode == 0) {
     // The second order partials of cubic basis functions
     vec4 dB3duu = cubicM * vec4(6*u, 2, 0, 0);
     vec4 dB3dvv = cubicM * vec4(6*v, 2, 0, 0);
