@@ -68,8 +68,8 @@ vec3 tensorAccumulatePatch(vec4 x, vec4 y) {
 }
 
 void main() {
-
   // ------------------------- Coordinates --------------------------
+  
   // Abstract patch coordinates
   float u = gl_TessCoord.x;
   float v = gl_TessCoord.y;
