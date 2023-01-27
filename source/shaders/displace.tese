@@ -107,8 +107,8 @@ void main() {
   // ---------------------- Biquadratic patch -----------------------
 
   // The quadratic basis functions
-  vec3 B2u = quadratricM * vec3(u*u, u, 1);
-  vec3 B2v = quadratricM * vec3(v*v, v, 1);
+  vec3 B2u = quadratricM * vec3(uhat*uhat, uhat, 1);
+  vec3 B2v = quadratricM * vec3(vhat*vhat, vhat, 1);
   
   // The partials of quadratic basis functions
   vec3 dB2du = quadratricM * vec3(2*uhat, 1, 0);
