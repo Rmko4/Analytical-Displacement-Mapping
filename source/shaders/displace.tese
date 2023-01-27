@@ -33,7 +33,7 @@ uniform float tileSize;
 uniform float tess_amplitude;
 
 uniform int displacement_mode;
-uniform int normal_mode;
+uniform int normal_mode, shading_mode;
 
 // Constants
 const float freq = .5F;
@@ -129,7 +129,7 @@ void main() {
   // The displaced vertex position f
   vec3 f = s + Ns * D;
 
-  // Partials of displaced surface f
+  // Approximate partials of displaced surface f
   vec3 dfdu = dsdu + Ns * dDdu;
   vec3 dfdv = dsdv + Ns * dDdv;
 
@@ -137,7 +137,7 @@ void main() {
 
   // ------------------------- True shading -------------------------
 
-  if (normal_mode == 0) {
+  if (normal_mode == 0 || shading_mode == 2) {
     // The second order partials of cubic basis functions
     vec4 dB3duu = cubicM * vec4(6*u, 2, 0, 0);
     vec4 dB3dvv = cubicM * vec4(6*v, 2, 0, 0);

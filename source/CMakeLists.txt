@@ -34,6 +34,7 @@ qt_add_executable(AnalyticalDispMap WIN32 MACOSX_BUNDLE
     subdivision/catmullclarksubdivider.cpp subdivision/catmullclarksubdivider.h
     subdivision/subdivider.h
     util/util.h util/util.cpp
+    util/turbocolormap.h util/turbocolormap.cpp
     resources.qrc
 )
 target_link_libraries(AnalyticalDispMap PRIVATE

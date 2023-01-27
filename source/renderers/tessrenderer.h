@@ -5,6 +5,7 @@
 
 #include "../mesh/mesh.h"
 #include "renderer.h"
+#include "../util/turbocolormap.h"
 
 /**
  * @brief The TessellationRenderer class is responsible for rendering
@@ -25,7 +26,7 @@ class TessellationRenderer : public Renderer {
   void initBuffers() override;
 
  private:
-  GLuint vao;
+  GLuint vao, texture;
   GLuint meshCoordsBO, meshNormalsBO, meshIndexBO;
   int meshIBOSize;
 //  QOpenGLShaderProgram* tessellationPatchShader;

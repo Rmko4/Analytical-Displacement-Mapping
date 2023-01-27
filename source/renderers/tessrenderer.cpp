@@ -80,6 +80,18 @@ void TessellationRenderer::initBuffers() {
   gl->glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, meshIndexBO);
 
   gl->glBindVertexArray(0);
+
+  // Init texture
+  gl->glGenTextures(1, &texture);
+
+  gl->glBindTexture(GL_TEXTURE_1D, texture);
+  gl->glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+  gl->glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  gl->glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+  gl->glTexImage1D(GL_TEXTURE_1D, 0, GL_RGB32F,
+                   static_cast<GLint>(fullTurboColorMap.size()), 0, GL_RGB,
+                   GL_FLOAT, fullTurboColorMap.data());
 }
 
 /**

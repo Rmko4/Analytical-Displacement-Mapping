@@ -201,12 +201,19 @@ void MainWindow::on_dispMode4Button_clicked()
   ui->MainDisplay->update();
 }
 
+void MainWindow::enable_normal_buttons(bool enable)
+{
+  ui->true_norms->setEnabled(enable);
+  ui->approx_norms->setEnabled(enable);
+  ui->interpolated_norms->setEnabled(enable);
+}
 
 // Using phong shading on the displacement mesh:
 void MainWindow::on_phong_shad_clicked()
 {
     ui->MainDisplay->settings.shading_mode = 0;
     ui->MainDisplay->settings.uniformUpdateRequired = true;
+    enable_normal_buttons(true);
     ui->MainDisplay->update();
 }
 
@@ -215,7 +222,16 @@ void MainWindow::on_norm_shad_clicked()
 {
     ui->MainDisplay->settings.shading_mode = 1;
     ui->MainDisplay->settings.uniformUpdateRequired = true;
+    enable_normal_buttons(true);
     ui->MainDisplay->update();
+}
+
+void MainWindow::on_error_shad_clicked()
+{
+  ui->MainDisplay->settings.shading_mode = 2;
+  ui->MainDisplay->settings.uniformUpdateRequired = true;
+      enable_normal_buttons(false);
+  ui->MainDisplay->update();
 }
 
 // Using true normals that include that were calculated by uncluded the Weingarten term in
@@ -243,4 +259,3 @@ void MainWindow::on_interpolated_norms_clicked()
     ui->MainDisplay->settings.uniformUpdateRequired = true;
     ui->MainDisplay->update();
 }
-

@@ -43,8 +43,11 @@ private slots:
   void on_detailSlider_valueChanged(int value);
   void on_levelOfDetailCheckBox_clicked(bool checked);
 
+  void enable_normal_buttons(bool enable);
+
   void on_phong_shad_clicked();
   void on_norm_shad_clicked();
+  void on_error_shad_clicked();
 
   void on_true_norms_clicked();
   void on_approx_norms_clicked();

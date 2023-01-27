@@ -25,6 +25,8 @@ out vec4 fColor;
 // Uniforms
 uniform mat3 normalmatrix;
 
+uniform sampler1D cmap;
+
 uniform float tileSize;
 uniform float tess_amplitude;
 
@@ -61,7 +63,7 @@ void main() {
   // -------------------- Displacement partials ---------------------
   
   // Non-interpolatory case
-  if (normal_mode == 0 || normal_mode == 1) {
+  if (normal_mode == 0 || normal_mode == 1 || shading_mode == 2) {
     // These are the coordinates of the 3x3 subpatch for displacement
     float u = subpatchTransform(vertU); // Maps to [0,1]
     float v = subpatchTransform(vertV);
@@ -89,19 +91,20 @@ void main() {
   }
 
   // --------------------- Normal computation  ----------------------
-
+  vec3 NfApprox, Nf;
   vec3 finalNormal = vertnormal_fs;
-  if (normal_mode == 1) {
+
+  if (normal_mode == 1 || shading_mode == 2) {
     // Approximate normals shading
     vec3 dfduApprox = dsdu + Ns * dDdu;
     vec3 dfdvvApprox = dsdv + Ns * dDdv;
 
-    vec3 NfApprox = normalize(cross(dfduApprox, dfdvvApprox));
+    NfApprox = normalize(cross(dfduApprox, dfdvvApprox));
     NfApprox = normalize(normalmatrix * NfApprox);
 
-    finalNormal = normalize(NfApprox);
+    finalNormal = NfApprox;
   }
-  else if (normal_mode == 0) {
+  if (normal_mode == 0 || shading_mode == 2) {
     // True normals shading
     vec3 dNsdu = vertbasenormaldu;
     vec3 dNsdv = vertbasenormaldv;
@@ -110,10 +113,10 @@ void main() {
     vec3 dfdu = dsdu + Ns * dDdu + dNsdu * D;
     vec3 dfdv = dsdv + Ns * dDdv + dNsdv * D;
 
-    vec3 Nf = normalize(cross(dfdu, dfdv));
+    Nf = normalize(cross(dfdu, dfdv));
     Nf = normalize(normalmatrix * Nf);
     
-    finalNormal = normalize(Nf);
+    finalNormal = Nf;
   }
 
   // --------------------------- Shading ----------------------------
@@ -123,9 +126,12 @@ void main() {
     // Phong shading:
     color = phongShading(matcolour, vertcoords_fs, finalNormal);
   }
-  else {
+  else if (shading_mode == 1) {
     // Normal shading:
     color = 0.5 * normalize(finalNormal) + vec3(0.5, 0.5, 0.5);
+  } else {
+    float error = acos(dot(NfApprox, Nf)) / M_PI;
+    color = vec3(texture(cmap, error));
   }
 
   fColor = vec4(color, 1.0);

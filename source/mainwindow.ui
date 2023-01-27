@@ -308,9 +308,9 @@ QGroupBox::title {
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>550</y>
+         <y>390</y>
          <width>201</width>
-         <height>201</height>
+         <height>171</height>
         </rect>
        </property>
        <property name="title">
@@ -322,7 +322,7 @@ QGroupBox::title {
           <x>10</x>
           <y>20</y>
           <width>191</width>
-          <height>173</height>
+          <height>141</height>
          </rect>
         </property>
         <layout class="QVBoxLayout" name="verticalLayout_4">
@@ -396,10 +396,10 @@ QGroupBox::title {
        </property>
        <property name="geometry">
         <rect>
-         <x>9</x>
-         <y>390</y>
+         <x>10</x>
+         <y>560</y>
          <width>201</width>
-         <height>161</height>
+         <height>191</height>
         </rect>
        </property>
        <property name="title">
@@ -410,8 +410,8 @@ QGroupBox::title {
          <rect>
           <x>9</x>
           <y>14</y>
-          <width>191</width>
-          <height>141</height>
+          <width>225</width>
+          <height>171</height>
          </rect>
         </property>
         <layout class="QVBoxLayout" name="shadingverticalLayout">
@@ -457,11 +457,8 @@ QGroupBox::title {
           </widget>
          </item>
          <item>
-          <layout class="QHBoxLayout" name="horizontalLayout_2">
+          <layout class="QVBoxLayout" name="verticalLayout_5">
            <property name="spacing">
-            <number>0</number>
-           </property>
-           <property name="rightMargin">
             <number>0</number>
            </property>
            <item>
@@ -487,6 +484,26 @@ QGroupBox::title {
              </attribute>
             </widget>
            </item>
+           <item>
+            <widget class="QRadioButton" name="error_shad">
+             <property name="text">
+              <string>Approximate normals error</string>
+             </property>
+             <attribute name="buttonGroup">
+              <string notr="true">buttonGroup</string>
+             </attribute>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_2">
+           <property name="spacing">
+            <number>0</number>
+           </property>
+           <property name="rightMargin">
+            <number>0</number>
+           </property>
           </layout>
          </item>
         </layout>
