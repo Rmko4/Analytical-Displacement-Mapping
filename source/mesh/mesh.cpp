@@ -66,7 +66,8 @@ void Mesh::computeRegularPatchIndices() {
   QVector<unsigned int> newRegularPatchIndices;
   newRegularPatchIndices.resize(16);
 
-  QVector<unsigned int> map = {1, 5, 4,  0,  7,  6,  2,  3,
+  // Maps vertex indices to 4x4 row-major ordering.
+  QVector<unsigned int> map = {1,  5,  4,  0,  7, 6, 2,  3,
                                14, 10, 11, 15, 8, 9, 13, 12};
 
   for (int f = 0; f < faces.size(); f++) {
@@ -96,7 +97,8 @@ void Mesh::computeRegularPatchIndices() {
         HalfEdge *currentOuterEdge = currentInnerEdge->twin->next->twin;
         // For rotating around outer corner quad
         for (int n = 0; n < face->valence; n++) {
-          newRegularPatchIndices[map[m * face->valence + n]] = currentOuterEdge->origin->index;
+          newRegularPatchIndices[map[m * face->valence + n]] =
+              currentOuterEdge->origin->index;
           currentOuterEdge = currentOuterEdge->next;
         }
         currentInnerEdge = currentInnerEdge->next;

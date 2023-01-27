@@ -4,32 +4,32 @@
 #include <QOpenGLShaderProgram>
 
 #include "../mesh/mesh.h"
-#include "renderer.h"
 #include "../util/turbocolormap.h"
+#include "renderer.h"
 
 /**
  * @brief The TessellationRenderer class is responsible for rendering
  * Tessellated patches.
  */
 class TessellationRenderer : public Renderer {
- public:
+public:
   TessellationRenderer();
   ~TessellationRenderer() override;
 
   void updateUniforms();
-  void updateBuffers(Mesh& m);
+  void updateBuffers(Mesh &m);
   void draw();
 
- protected:
-  QOpenGLShaderProgram* constructTesselationShader(const QString& name) const;
+protected:
+  QOpenGLShaderProgram *constructTesselationShader(const QString &name) const;
   void initShaders() override;
   void initBuffers() override;
 
- private:
+private:
   GLuint vao, texture;
   GLuint meshCoordsBO, meshNormalsBO, meshIndexBO;
   int meshIBOSize;
-//  QOpenGLShaderProgram* tessellationPatchShader;
+  //  QOpenGLShaderProgram* tessellationPatchShader;
 
   // Uniforms
   GLint uniModelViewMatrix, uniProjectionMatrix, uniNormalMatrix;
@@ -39,4 +39,4 @@ class TessellationRenderer : public Renderer {
   GLint uniShadingMode, uniNormalMode;
 };
 
-#endif  // TessRenderer_H
+#endif // TessRenderer_H

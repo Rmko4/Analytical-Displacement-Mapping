@@ -130,6 +130,7 @@ void main() {
     // Normal shading:
     color = 0.5 * normalize(finalNormal) + vec3(0.5, 0.5, 0.5);
   } else {
+    // Approximate normal error shading:
     float error = acos(dot(NfApprox, Nf)) / M_PI;
     color = vec3(texture(cmap, error));
   }

@@ -52,7 +52,8 @@ TessellationRenderer::constructTesselationShader(const QString &name) const {
                                   pathTesE);
   shader->addShaderFromSourceFile(QOpenGLShader::Fragment, pathFrag);
   shader->addShaderFromSourceFile(QOpenGLShader::Fragment, pathShading);
-  shader->addShaderFromSourceFile(QOpenGLShader::TessellationEvaluation, pathProcedural);
+  shader->addShaderFromSourceFile(QOpenGLShader::TessellationEvaluation,
+                                  pathProcedural);
   shader->addShaderFromSourceFile(QOpenGLShader::Fragment, pathProcedural);
   shader->link();
   return shader;
@@ -105,7 +106,6 @@ void TessellationRenderer::updateBuffers(Mesh &currentMesh) {
 
   QVector<unsigned int> *meshIndices;
   meshIndices = &currentMesh.getRegularPatchIndices();
-
 
   gl->glBindBuffer(GL_ARRAY_BUFFER, meshCoordsBO);
   gl->glBufferData(GL_ARRAY_BUFFER, sizeof(QVector3D) * vertexCoords.size(),
@@ -165,7 +165,6 @@ void TessellationRenderer::updateUniforms() {
 
   gl->glUniform1i(uniShadingMode, settings->shading_mode);
   gl->glUniform1i(uniNormalMode, settings->normal_mode);
-
 }
 
 /**

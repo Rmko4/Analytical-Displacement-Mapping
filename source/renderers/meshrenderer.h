@@ -11,19 +11,19 @@
  * any arbitrary mesh.
  */
 class MeshRenderer : public Renderer {
- public:
+public:
   MeshRenderer();
   ~MeshRenderer() override;
 
   void updateUniforms();
-  void updateBuffers(Mesh& m);
+  void updateBuffers(Mesh &m);
   void draw();
 
- protected:
+protected:
   void initShaders() override;
   void initBuffers() override;
 
- private:
+private:
   GLuint vao;
   GLuint meshCoordsBO, meshNormalsBO, meshIndexBO;
   int meshIBOSize;
@@ -33,4 +33,4 @@ class MeshRenderer : public Renderer {
   GLint uniShadingMode;
 };
 
-#endif  // MESHRENDERER_H
+#endif // MESHRENDERER_H
