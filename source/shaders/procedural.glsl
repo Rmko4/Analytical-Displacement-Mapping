@@ -46,7 +46,7 @@ float coeff(float u, float v) {
       return min(1.0, v * 10.0) * tess_amplitude - tess_amplitude;
     case 2: // Chocolate bar
       return min(1.0, v * 5.0) * tess_amplitude;
-    case 3: // Random
+    case 3: // Pseudo-random
     u = 7. * u;
     v = 7.1 * v;
     float u_f = floor(u);
