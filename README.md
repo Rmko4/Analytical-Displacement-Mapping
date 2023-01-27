@@ -36,3 +36,7 @@ The components of the application related to analytical displacement mapping:
 ![Normal shading](images/normals-shading.png)
 - Approximation Error (Error of approximate errors compared to true normals)
 ![Alt text](images/approximation-error.png)
+
+### Level-of-Detail:
+- Screen-based edge length level-of-detail
+![Alt text](images/level-of-detail.png)
