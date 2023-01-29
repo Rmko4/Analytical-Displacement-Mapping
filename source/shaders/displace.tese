@@ -147,22 +147,20 @@ void main() {
     vec3 dsdvv = tensorAccumulatePatch(B3u, dB3dvv);
     vec3 dsduv = tensorAccumulatePatch(dB3du, dB3dv);
 
-    float lenDsdu = length(dsdu);
-    float lenDsdv = length(dsdv);
-
     // Coefficients of first fundamental form
-    float Ec = lenDsdu * lenDsdu;
+    float Ec = dot(dsdu, dsdu);
     float Fc = dot(dsdu, dsdv);
-    float Gc = lenDsdv * lenDsdv;
+    float Gc = dot(dsdv, dsdv);
 
     // Coefficients of second fundamental form
-    float ec = dot(Ns, dsduu);
-    float fc = dot(Ns, dsduv);
-    float gc = dot(Ns, dsdvv);
+    float Lc = dot(Ns, dsduu);
+    float Mc = dot(Ns, dsduv);
+    float Nc = dot(Ns, dsdvv);
 
-    // Partials of non-normalized normals of base surface s 
-    vec3 dNsnndu = dsdu * (fc*Fc - ec*Gc) / (Ec*Gc - Fc*Fc) + dsdv * (ec*Fc - fc*Ec) / (Ec*Gc- Fc*Fc);
-    vec3 dNsnndv = dsdv * (fc*Fc - ec*Gc) / (Ec*Gc - Fc*Fc) + dsdu * (ec*Fc - fc*Ec) / (Ec*Gc - Fc*Fc);
+    // Partials of non-normalized normals of base surface s
+    float denom = Ec*Gc - Fc*Fc;
+    vec3 dNsnndu = dsdu * (Fc*Mc - Gc*Lc) / denom + dsdv * (Fc*Lc - Ec*Mc) / denom;
+    vec3 dNsnndv = dsdu * (Fc*Nc - Gc*Mc) / denom + dsdv * (Fc*Mc - Ec*Nc) / denom;
 
     float NsLength = length(cross(dsdu, dsdv));
 
