@@ -1,5 +1,5 @@
 # Analytical-Displacement-Mapping
-### Implementation of analytical displacement mapping using hardware tessellation based on [Nießner & Loop (2013)](https://dl.acm.org/doi/10.1145/2487228.2487234)
+### Implementation of analytic displacement mapping using hardware tessellation based on [Nießner & Loop (2013)](https://dl.acm.org/doi/10.1145/2487228.2487234)
 ![Analytical displacement mapping overview](images/overview-scaled.png)
 
 ## Code
